@@ -1,24 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-<<<<<<< HEAD
-using UnityEngine.InputSystem;
-=======
 //using UnityEngine.InputSystem;
->>>>>>> a81b77686d85a4d9d85dc943a11758ad7415da08
 using UnityEngine.UIElements;
 
 public class TouchScript : MonoBehaviour
 {
-<<<<<<< HEAD
-    [SerializeField]
-    private GameObject player;
-
-    private PlayerInput playerInput;
-    private InputAction touchPosition;
-    private InputAction touchPress;
-    private void Awake()
-=======
     /*[SerializeField]
     private GameObject player;
     private PlayerInput playerInput;
@@ -84,7 +71,6 @@ public class TouchScript : MonoBehaviour
 
 
     /*private void Awake()
->>>>>>> a81b77686d85a4d9d85dc943a11758ad7415da08
     {
         playerInput = GetComponent<PlayerInput>();
         touchPosition = playerInput.actions["TouchPosition"];
@@ -106,11 +92,7 @@ public class TouchScript : MonoBehaviour
         Vector3 position = Camera.main.ScreenToWorldPoint(touchPosition.ReadValue<Vector2>());
         position.z = player.transform.position.z;
         player.transform.position = position;
-<<<<<<< HEAD
-    }
-=======
     }*/
->>>>>>> a81b77686d85a4d9d85dc943a11758ad7415da08
 
 
 }
