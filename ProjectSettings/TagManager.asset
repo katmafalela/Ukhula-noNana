@@ -4,11 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
   - PuzzleButton
-=======
-  - Object
->>>>>>> a81b77686d85a4d9d85dc943a11758ad7415da08
   layers:
   - Default
   - TransparentFX
