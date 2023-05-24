@@ -1,41 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject player;
+    //events to get touch's change in position & time (see if i can reorder them for my understanding)
+    #region Events  
+    public delegate void OnStartTouch(Vector2 position, float time);//delegating OnStartTouch event to other scripts so they easily subscibe to it (Without need to refrence this script)
+    public event OnStartTouch OnStartEvent;
+    public delegate void EndTouch(Vector2 position, float time);//delegating OnStartTouch event to other scripts so they easily subscibe to it (Without need to refrence this script)
+    public event EndTouch OnEndTouch;
+    #endregion
+/*
+    private PlayerControls playerControls;
 
-    private PlayerInput playerInput;
-
-    private InputAction touchPositionAction;
-    private InputAction touchPressAction;
-
-    private void awake()
+    private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
-        touchPressAction = playerInput.actions["TouchPress"];
-        touchPositionAction = playerInput.actions["TouchPosition"];
+        playerControls = new PlayerControls();
     }
 
-    private void onEnable()
+   private void OnEnable()
     {
-        touchPressAction.performed += TouchPressed;
+        playerControls.Enable();
     }
 
-    private void onDisable()
+    private void OnDisable()
     {
-        touchPressAction.performed -= TouchPressed;
+        playerControls.Disable();
     }
 
-    private void TouchPressed(InputAction.CallbackContext context)
+    // Start is called before the first frame update
+    void Start()
     {
-       Vector3 position = Camera.main.ScreenToWorldPoint(touchPositionAction.ReadValue<Vector2>());
-        position.z = player.transform.position.z;
-        player.transform.position = position;
+        //Subscibing to event (+=) when start pressing screen to get finger touch info & call function 
+        playerControls.TouchMap.PrimaryContactAction.started += ctx => StartTouchPrimary(ctx);
+        playerControls.TouchMap.PrimaryContactAction.canceled += ctx => EndTouchPrimary(ctx);
     }
 
+   
 
+    private void StartTouchPrimary(InputAction.CallbackContext.context)
+    {
+        //if something has subscribed to event -> send out event
+        if (OnStartTouch != null) OnStartTouch;
+        {
+
+        }
+    }
+*/
 }
