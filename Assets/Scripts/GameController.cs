@@ -1,103 +1,111 @@
 using System.Collections;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
-    public List<Button> btns = new();//This allows us to get our buttons
+    private bool canFlip; // Flag to prevent flipping more than two tiles at a time
+    private int firstFlippedIndex; // Index of the first flipped tile
+
+    private int matchesFound; // Count of matched pairs
+    private int totalMatches; // Total number of pairs to be matched
+
+    public List<Button> btns = new List<Button>(); // List of buttons that represent the image tiles
     [SerializeField]
     private Sprite bgImage;
 
     public Sprite[] puzzles;
-    public List<Sprite> puzzles2 = new();
-
-    private bool firstGuess;
-    private bool secondGuess;
-
-    private int firstGuessIndex;
-    private int secondGuessIndex;
-
-    private int guessCount;
-    private int countCorrectGuesses;
-    private int gameGuesses;
-
-    private string firstGuessPuzzle;
-    private string secondGuessPuzzle;
+    public List<Sprite> puzzles2 = new List<Sprite>();
     public void Awake()
     {
-        puzzles = Resources.LoadAll<Sprite>("Sprites/EmojiOne");  
+        puzzles = Resources.LoadAll<Sprite>("Sprites/EmojiOne");
     }
+
     public void Start()
     {
-        //Debug.Log("Hello");
+        canFlip = true;
+        firstFlippedIndex = -1;
+        matchesFound = 0;
+        totalMatches = puzzles.Length / 2;
+
         GetButton();
+        AssignImages();
         AddListeners();
-        addPuzzlePieces();
     }
-    
+
     public void GetButton()
     {
-        GameObject[] objects = GameObject.FindGameObjectsWithTag("PuzzleButton");//Uses the tag to find a game object
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("PuzzleButton");
 
-       //Goes through the button list and adds the button component
-        for(int i=0; i<objects.Length;i++)
+        for (int i = 0; i < objects.Length; i++)
         {
-           btns.Add(objects[i].GetComponent<Button>());
-            btns[i].image.sprite = bgImage; // Assign the bgImage to in the background of all the buttons created
+            btns.Add(objects[i].GetComponent<Button>());
+            btns[i].image.sprite = bgImage;
         }
     }
-    public void addPuzzlePieces()
+    private void AssignImages()
     {
         int counter = btns.Count;
-        int _index = 0;
-
-        for(int i=0;i<counter;i++)
+        int index = 0;
+        for (int i = 0; i < counter; i++)
         {
-            if(_index==counter/2)
+            if (index == counter / 2)
             {
-                _index = 0;
+                index = 0;
             }
-            puzzles2.Add(puzzles[_index]);
-            _index++;
+            puzzles2.Add(puzzles[index]);
+            index++;
         }
     }
-     public  void AddListeners()
+
+    public void AddListeners()
     {
-        //Add functionality to the buttons each time they are created
-        
-        //For each button pressed in the button list add a listener
-        foreach (Button btn in btns)
+        foreach (Button button in btns)
         {
-            btn.onClick.AddListener(()=> PickAPuzzle());
+            button.onClick.AddListener(() => StartCoroutine(FlipTile(button)));
         }
     }
-    public void PickAPuzzle()
+
+    private IEnumerator FlipTile(Button button)
     {
-        string name = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name;
-        if (!firstGuess)
-        {
-            firstGuess = true;
-            firstGuessIndex = int.Parse(name);
-            firstGuessPuzzle = puzzles2[firstGuessIndex].name;
-            btns[firstGuessIndex].image.sprite = puzzles2[firstGuessIndex];
-        }else if(!secondGuess)
-        {
+        int buttonIndex = btns.IndexOf(button);
 
-            secondGuess = true;
-            secondGuessIndex = int.Parse(name);
-            secondGuessPuzzle = puzzles2[secondGuessIndex].name;
-            btns[secondGuessIndex].image.sprite = puzzles2[secondGuessIndex];
+        if (!canFlip || buttonIndex == firstFlippedIndex)
+            yield break;
 
-            if(firstGuessPuzzle == secondGuessPuzzle && firstGuessIndex != secondGuessIndex)
+        button.image.sprite = puzzles2[buttonIndex];
+
+        if (firstFlippedIndex == -1)
+        {
+            firstFlippedIndex = buttonIndex;
+        }
+        else
+        {
+            canFlip = false;
+            yield return new WaitForSeconds(1f);
+
+            if (puzzles2[buttonIndex] == puzzles2[firstFlippedIndex])
             {
-                Debug.Log("Puzzles match");
+                // Match found
+                button.interactable = false;
+                btns[firstFlippedIndex].interactable = false;
+                matchesFound++;
+
+                if (matchesFound == totalMatches)
+                {
+                    Debug.Log("Congratulations! You've matched all pairs.");
+                    // Add game completion logic here
+                }
             }
             else
             {
-                Debug.Log("Puzzles don't match");
+                // No match
+                button.image.sprite = bgImage;
+                btns[firstFlippedIndex].image.sprite = bgImage;
             }
+
+            firstFlippedIndex = -1;
+            canFlip = true;
         }
-        //Debug.Log("Pressed+ " + name);
     }
 }
