@@ -5,22 +5,22 @@ using UnityEngine.InputSystem;
 
 [DefaultExecutionOrder(-1)] //ensuring this script runs before any other script
 
-public class InputManager : Singleton<InputManager> //Making script/class a singleton (making it easier for other scripts to access it without need to reference it)
+public class InputManager : Singleton<InputManager> //Making script/class a singleton (making it easier for other scripts to access it without need to reference it) //MonoBehaviour
 {
-    //events to get touch's change in position & time (see if i can reorder them for my understanding)
+    //events to get touch's change in position & time 
     #region Events  
-    public delegate void StartTouch(Vector2 position, float time);//delegating OnStartTouch event to other scripts so they easily subscibe to it (Without need to refrence this script)
-    public event StartTouch OnStartTouch; 
-    public delegate void EndTouch(Vector2 position, float time);//delegating OnStartTouch event to other scripts so they easily subscibe to it (Without need to refrence this script)
-    public event EndTouch OnEndTouch;
+    public delegate void OnStartTouchDelegate(Vector2 position, float time); //creating delegate event so other scripts can easily subscibe to it (Without need to refrence this script)
+    public event OnStartTouchDelegate OnStartTouch; //storing delegate event as publicly accessible event
+    public delegate void OnEndTouchDelegate(Vector2 position, float time); 
+    public event OnEndTouchDelegate OnEndTouch; 
     #endregion
-    
-    private PlayerController playerControls;
+
+    private PlayerControls playerControls;
     private Camera mainCamera;
 
     private void Awake()
     {
-        playerControls = new PlayerController();
+        playerControls = new PlayerControls();
         mainCamera = Camera.main;
     }
 
@@ -37,34 +37,33 @@ public class InputManager : Singleton<InputManager> //Making script/class a sing
     // Start is called before the first frame update
     void Start()
     {
-        //Subscribing to started & canceled events (+=) when start pressing screen to get finger touch info (context)
-        playerControls.TouchMap.PrimaryContactAction.started += ctx => StartTouchPrimary(ctx);
-        playerControls.TouchMap.PrimaryContactAction.canceled += ctx => EndTouchPrimary(ctx);
+        playerControls.TouchMap.PrimaryContactAction.started += ctx => StartPrimaryTouch(ctx); //Subscribing (+=) to started event when start touching screen to get touch info (context) & defining OnStartTouch event
+        playerControls.TouchMap.PrimaryContactAction.canceled += ctx => EndPrimaryTouch(ctx); //Subscribing (+=) to canceled event when stop touching screen to get touch info (context) & defining OnEndTouch event
     }
 
    
 
-    private void StartTouchPrimary(InputAction.CallbackContext context)
+    private void StartPrimaryTouch(InputAction.CallbackContext context)
     {
-        if (OnStartTouch != null) //if something has subscribed to event
+        if (OnStartTouch != null) //if event has been subscribed to
         {
             //getting touch position & time 
-            //converting touch position (action type's value) from screen to world coordinates; using Utilities class' static Vector3 (ScreenToWorldPosition)
+                //converting touch position (action type's value) from screen to world coordinates; using Utilities class' static Vector3 (ScreenToWorldPosition)
             OnStartTouch(Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>()), (float) context.startTime);
         }
     }
 
-    private void EndTouchPrimary(InputAction.CallbackContext context)
+    private void EndPrimaryTouch(InputAction.CallbackContext context)
     {
-        if (OnEndTouch != null) //if something has subscribed to event
+        if (OnEndTouch != null) //if event has been subscribed to
         {
             //getting touch position & time 
-            //converting touch position (action type's value) from screen to world coordinates; using Utilities class' static Vector3 (ScreenToWorldPosition)
+                //converting touch position (action type's value) from screen to world coordinates; using Utilities class' static Vector3 (ScreenToWorldPosition) //try do this manually coz don't understant utilities yet
             OnEndTouch(Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>()), (float) context.time);
         }
     }
 
-    //getting finger position to update trail renderer
+    //getting touch position to update trail renderer //get this in my conventional way (ask chat GPT, lol)
     public Vector2 PrimaryTouchPosition()
     {
         return Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>());
