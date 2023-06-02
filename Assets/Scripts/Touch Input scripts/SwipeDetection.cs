@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class SwipeDetection : MonoBehaviour
 {
+    public GameObject circle;
+
     [SerializeField] private float minDistance = 0.2f;
     [SerializeField] private float maxTime = 1f;
     [SerializeField, Range(0f,1f)] private float swipeDirectionSimilarityPercentage = 0.9f;
@@ -28,14 +30,14 @@ public class SwipeDetection : MonoBehaviour
 
     private void OnEnable()
     {
-        inputManager.OnStartTouch += SwipeStart; //Subscribing to inputManager's OnStartTouch event (+=) to make touch & swipe's time & pos relative each other
-        inputManager.OnEndTouch += SwipeEnd; //Subscribing to inputManager's OnStartTouch event (+=) to make touch & swipe's time & last pos before finger lift relative to each other
+        inputManager.OnStartTouch += SwipeStart; //Subscribing (+=) to inputManager's OnStartTouch event to make touch & swipe's time & pos relative each other
+        inputManager.OnEndTouch += SwipeEnd; //Subscribing (+=) to inputManager's OnEndTouch event to make touch & swipe's time & last pos before finger lift relative to each other
     }
 
     private void OnDisable()
     {
-        inputManager.OnStartTouch -= SwipeStart; //unsubscribing (-=) to inputManager's OnStartTouch event  
-        inputManager.OnEndTouch -= SwipeEnd; //unsubscribing (-=) to inputManager's OnStartTouch event 
+        inputManager.OnStartTouch -= SwipeStart; //unsubscribing (-=) from inputManager's OnStartTouch event  
+        inputManager.OnEndTouch -= SwipeEnd; //unsubscribing (-=) from inputManager's OnEndTouch event
     }
 
     private void SwipeStart(Vector2 position, float time)
@@ -82,8 +84,13 @@ public class SwipeDetection : MonoBehaviour
             Vector3 swipeDirection = endPosition - startPosition;
             Vector2 direction2D = new Vector2(swipeDirection.x, swipeDirection.y).normalized; //normalizing coz don't need length, of vector
             
-            StandardizeSwipeDirection(direction2D); 
+            StandardizeSwipeDirection(direction2D);
+
+            //Debug.Log(direction2D); //PrimaryTouchPosition()
+            //circle.transform.position = direction2D;
         }
+
+        
     }
 
     //standardizing swipe direction to up/down/left/right
@@ -107,7 +114,4 @@ public class SwipeDetection : MonoBehaviour
             print("Swipe right -> do something");
         }
     }
-
-
-
 }
