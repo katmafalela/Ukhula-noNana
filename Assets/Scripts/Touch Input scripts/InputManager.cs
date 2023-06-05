@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     public event OnEndTouchDelegate OnEndTouch;
     #endregion
 
-    [SerializeField] private GameObject circle;
+    [SerializeField] private GameObject circle; //for debugging
 
     //private InputActions inputActions; //method without player input component
     private PlayerInput playerInput;
@@ -107,7 +107,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     }
 
     //this is where the problem is (Screen to world conversion)
-    public Vector2 PrimaryTouchPosition() //World coordinates (min = -1f; max = 1f)
+    public Vector2 PrimaryTouchPosition() //returns World coordinates (min = -1f; max = 1f) which limits range of swipe or tap regardless of where you tap. e.g. tap at edge of screen, doesn't return those exact coordinates
     {
         //return Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>());
 
