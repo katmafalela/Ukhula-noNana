@@ -19,13 +19,10 @@ public class SwipeDetection : MonoBehaviour
     private Vector2 endPosition;
     private float endTime;
 
-    //private Coroutine coroutine;
-
     private void Awake()
     {
         //Try this instead of Singleton
         inputManager = GetComponent<InputManager>();
-        //inputManager = InputManager.Instance;
     }
 
     private void OnEnable()
@@ -47,17 +44,17 @@ public class SwipeDetection : MonoBehaviour
 
         //enabling trail
         swipeTrail.SetActive(true);
-        swipeTrail.transform.position = position;
+        //swipeTrail.transform.position = position; //redundant?
         StartCoroutine(UpdateTrailPosition());
-        //coroutine = StartCoroutine(HandleSwipeTrail());
     }
 
-    //making trail relative to touch position
+    //moving soemthing relative to touch position
     private IEnumerator UpdateTrailPosition()
     {
         while (true) 
         {
             swipeTrail.transform.position = inputManager.PrimaryTouchPosition();
+            circle.transform.position = inputManager.PrimaryTouchPosition();
             yield return null; //waiting for next frame to update trail's position
         }
     }
@@ -79,37 +76,33 @@ public class SwipeDetection : MonoBehaviour
         //checking if finger has moved far enough & if touch time is short enough to qualify as swipe 
         if (Vector3.Distance(startPosition, endPosition) >= minDistance && (endTime - startTime) <= maxTime)
         {
-            Debug.DrawLine(startPosition, endPosition, UnityEngine.Color.red, 5f); 
+            //Debug.DrawLine(startPosition, endPosition, UnityEngine.Color.red, 5f); 
 
             Vector3 swipeDirection = endPosition - startPosition;
-            Vector2 direction2D = new Vector2(swipeDirection.x, swipeDirection.y).normalized; //normalizing coz don't need length, of vector
+            Vector2 swipeDirection2D = new Vector2(swipeDirection.x, swipeDirection.y).normalized; //normalizing coz don't need length, of vector
             
-            StandardizeSwipeDirection(direction2D);
-
-            //Debug.Log(direction2D); //PrimaryTouchPosition()
-            //circle.transform.position = direction2D;
+            StandardizeSwipeDirection(swipeDirection2D);
         }
 
-        
     }
 
     //standardizing swipe direction to up/down/left/right
-    private void StandardizeSwipeDirection (Vector2 swipeDirection) 
+    private void StandardizeSwipeDirection (Vector2 swipeDirection2D) 
     {
         //Comparing how similar swipe direction is to up/down/left/right; using dot product (see API)
-        if (Vector2.Dot(Vector2.up, swipeDirection) > swipeDirectionSimilarityPercentage) 
+        if (Vector2.Dot(Vector2.up, swipeDirection2D) > swipeDirectionSimilarityPercentage) 
         {
             print("Swipe Up -> do something");
         }
-        else if (Vector2.Dot(Vector2.down, swipeDirection) > swipeDirectionSimilarityPercentage)
+        else if (Vector2.Dot(Vector2.down, swipeDirection2D) > swipeDirectionSimilarityPercentage)
         {
             print("Swipe Down -> do something");
         }
-        else if (Vector2.Dot(Vector2.left, swipeDirection) > swipeDirectionSimilarityPercentage)
+        else if (Vector2.Dot(Vector2.left, swipeDirection2D) > swipeDirectionSimilarityPercentage)
         {
             print("Swipe left -> do something");
         }
-        else if (Vector2.Dot(Vector2.right, swipeDirection) > swipeDirectionSimilarityPercentage)
+        else if (Vector2.Dot(Vector2.right, swipeDirection2D) > swipeDirectionSimilarityPercentage)
         {
             print("Swipe right -> do something");
         }

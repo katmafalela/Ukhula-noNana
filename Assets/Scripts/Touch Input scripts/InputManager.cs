@@ -17,7 +17,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
 
     [SerializeField] private GameObject circle; //for debugging
 
-    //private InputActions inputActions; //method without player input component
     private PlayerInput playerInput;
 
     private InputAction primaryContactAction;
@@ -26,7 +25,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
 
     private void Awake()
     {
-        //inputActions = new InputActions(); //method without player input component
         playerInput = GetComponent<PlayerInput>();
 
         primaryContactAction = playerInput.actions["PrimaryContactAction"];
@@ -34,21 +32,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
 
     }
 
-   private void OnEnable()
-    {
-        //inputActions.Enable();//method without player input component
-
-        //primaryContactAction.performed += StartPrimaryTouch2; //Subscribing (+=) to OnStartTouch event (through StartPrimaryTouch) when start touching screen to get event info (context) (listening for functions that can subsribe to event)
-    }
-
-    private void OnDisable()
-    {
-        //inputActions.Disable();//method without player input component
-
-        //primaryContactAction.performed -= StartPrimaryTouch2; //unsubscribing (-=) from OnEndTouch event (through EndPrimaryTouch) when stop touching screen to get event info (context) (stop listening for functions that can subsribe to event)
-    }
-
-        // Start is called before the first frame update
+    // Start is called before the first frame update
     void Start()
     {
         //method without player input component
@@ -69,15 +53,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         }
     }*/
 
-    /*private void StartPrimaryTouch2(InputAction.CallbackContext context)
-    {
-        Vector2 touchPosition = primaryTouchPositionAction.ReadValue<Vector2>();
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(touchPosition);
-        worldPosition.z = circle.transform.position.z;
-        circle.transform.position = worldPosition;
-        Debug.Log(worldPosition);
-    }*/
-
      private void StartPrimaryTouch(InputAction.CallbackContext context)
     {
 
@@ -85,12 +60,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         {
             //getting touch position & time during event
             OnStartTouch(PrimaryTouchPosition(), (float)context.time);
-  
-            //Debug.Log(PrimaryTouchPosition());
-            circle.transform.position = PrimaryTouchPosition();
-
-            //converting touch position (action type's value) from screen to world coordinates; using Utilities class' static Vector3 (ScreenToWorldPosition)
-            //OnStartTouch(Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>()), (float) context.startTime);
         }
     }
 
@@ -100,22 +69,15 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         {
             //getting touch position & time during event
             OnEndTouch(PrimaryTouchPosition(), (float)context.time);
-
-            //converting touch position (action type's value) from screen to world coordinates; using Utilities class' static Vector3 (ScreenToWorldPosition) //try do this manually coz don't understant utilities yet
-            // OnEndTouch(Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>()), (float) context.time);
         }
     }
 
-    //this is where the problem is (Screen to world conversion)
-    public Vector2 PrimaryTouchPosition() //returns World coordinates (min = -1f; max = 1f) which limits range of swipe or tap regardless of where you tap. e.g. tap at edge of screen, doesn't return those exact coordinates
+    public Vector2 PrimaryTouchPosition() //World coordinates (min = -1f; max = 1f)
     {
-        //return Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>());
-
         Vector2 touchPosition = primaryTouchPositionAction.ReadValue<Vector2>();
-        Vector3 screenPosition = new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane); //making z coordinate relative to nearest point that camera can see stuff (beyond this position)
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-        //Vector3 worldPosition = Camera.main.ScreenToViewportPoint(screenPosition);
-        return new Vector2(worldPosition.x, worldPosition.y);
+        Vector3 screenTouchPosition = new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane); //making z coordinate relative to nearest point that camera can see stuff (beyond this position)
+        Vector3 worldTouchPosition = Camera.main.ScreenToWorldPoint(screenTouchPosition);
+        return new Vector2(worldTouchPosition.x, worldTouchPosition.y);
     }
 
 }
