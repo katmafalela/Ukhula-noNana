@@ -391,7 +391,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -834,6 +834,7 @@ GameObject:
   - component: {fileID: 1692801341}
   - component: {fileID: 1692801339}
   - component: {fileID: 1692801340}
+  - component: {fileID: 1692801342}
   m_Layer: 0
   m_Name: Touch Manager
   m_TagString: Untagged
@@ -916,6 +917,19 @@ MonoBehaviour:
   m_DefaultActionMap: TouchMap
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1692801342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692801335}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d09edb5b00d6914fbe5510bc948b862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circle: {fileID: 1951257453}
 --- !u!1 &1769993449
 GameObject:
   m_ObjectHideFlags: 0

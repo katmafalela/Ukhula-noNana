@@ -87,7 +87,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
             OnStartTouch(PrimaryTouchPosition(), (float)context.time);
   
             //Debug.Log(PrimaryTouchPosition());
-            //circle.transform.position = PrimaryTouchPosition();
+            circle.transform.position = PrimaryTouchPosition();
 
             //converting touch position (action type's value) from screen to world coordinates; using Utilities class' static Vector3 (ScreenToWorldPosition)
             //OnStartTouch(Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>()), (float) context.startTime);
@@ -112,9 +112,9 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         //return Utilities.ScreenToWorldPosition(mainCamera, playerControls.TouchMap.PrimaryTouchPosition.ReadValue<Vector2>());
 
         Vector2 touchPosition = primaryTouchPositionAction.ReadValue<Vector2>();
-        Vector3 screenPosition = new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane); //making z coordinate relative to nearest point that camera can see geometry (beyond this position)
+        Vector3 screenPosition = new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane); //making z coordinate relative to nearest point that camera can see stuff (beyond this position)
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-
+        //Vector3 worldPosition = Camera.main.ScreenToViewportPoint(screenPosition);
         return new Vector2(worldPosition.x, worldPosition.y);
     }
 
