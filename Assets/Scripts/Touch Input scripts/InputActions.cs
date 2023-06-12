@@ -70,6 +70,74 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Touch"",
+            ""id"": ""aefb0e57-4833-4ead-a567-e7ed00fd94e2"",
+            ""actions"": [
+                {
+                    ""name"": ""SecondaryFingerTouch"",
+                    ""type"": ""Value"",
+                    ""id"": ""c2c0337d-8272-4f71-b0c2-de347e777f70"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PrimaryFingerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""033254ee-9f07-4bb3-90c2-29625963e1b5"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SecondaryScreenContact"",
+                    ""type"": ""Value"",
+                    ""id"": ""fe541226-da7a-4619-8b27-437309203d3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""94b7561a-f031-44c9-a8b5-b436ce547da7"",
+                    ""path"": ""<Touchscreen>/touch1/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryFingerTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4ab18dff-b0af-447e-809e-0c91d70b3a54"",
+                    ""path"": ""<Touchscreen>/touch0/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryFingerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a679b227-9116-40a9-b8d8-645f6ff3466c"",
+                    ""path"": ""<Touchscreen>/touch1/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryScreenContact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -78,6 +146,11 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_TouchMap = asset.FindActionMap("TouchMap", throwIfNotFound: true);
         m_TouchMap_PrimaryContactAction = m_TouchMap.FindAction("PrimaryContactAction", throwIfNotFound: true);
         m_TouchMap_PrimaryTouchPosition = m_TouchMap.FindAction("PrimaryTouchPosition", throwIfNotFound: true);
+        // Touch
+        m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
+        m_Touch_SecondaryFingerTouch = m_Touch.FindAction("SecondaryFingerTouch", throwIfNotFound: true);
+        m_Touch_PrimaryFingerPosition = m_Touch.FindAction("PrimaryFingerPosition", throwIfNotFound: true);
+        m_Touch_SecondaryScreenContact = m_Touch.FindAction("SecondaryScreenContact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -174,9 +247,64 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         }
     }
     public TouchMapActions @TouchMap => new TouchMapActions(this);
+
+    // Touch
+    private readonly InputActionMap m_Touch;
+    private ITouchActions m_TouchActionsCallbackInterface;
+    private readonly InputAction m_Touch_SecondaryFingerTouch;
+    private readonly InputAction m_Touch_PrimaryFingerPosition;
+    private readonly InputAction m_Touch_SecondaryScreenContact;
+    public struct TouchActions
+    {
+        private @InputActions m_Wrapper;
+        public TouchActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @SecondaryFingerTouch => m_Wrapper.m_Touch_SecondaryFingerTouch;
+        public InputAction @PrimaryFingerPosition => m_Wrapper.m_Touch_PrimaryFingerPosition;
+        public InputAction @SecondaryScreenContact => m_Wrapper.m_Touch_SecondaryScreenContact;
+        public InputActionMap Get() { return m_Wrapper.m_Touch; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TouchActions set) { return set.Get(); }
+        public void SetCallbacks(ITouchActions instance)
+        {
+            if (m_Wrapper.m_TouchActionsCallbackInterface != null)
+            {
+                @SecondaryFingerTouch.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryFingerTouch;
+                @SecondaryFingerTouch.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryFingerTouch;
+                @SecondaryFingerTouch.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryFingerTouch;
+                @PrimaryFingerPosition.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryFingerPosition;
+                @SecondaryScreenContact.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryScreenContact;
+                @SecondaryScreenContact.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryScreenContact;
+                @SecondaryScreenContact.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryScreenContact;
+            }
+            m_Wrapper.m_TouchActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @SecondaryFingerTouch.started += instance.OnSecondaryFingerTouch;
+                @SecondaryFingerTouch.performed += instance.OnSecondaryFingerTouch;
+                @SecondaryFingerTouch.canceled += instance.OnSecondaryFingerTouch;
+                @PrimaryFingerPosition.started += instance.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.performed += instance.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.canceled += instance.OnPrimaryFingerPosition;
+                @SecondaryScreenContact.started += instance.OnSecondaryScreenContact;
+                @SecondaryScreenContact.performed += instance.OnSecondaryScreenContact;
+                @SecondaryScreenContact.canceled += instance.OnSecondaryScreenContact;
+            }
+        }
+    }
+    public TouchActions @Touch => new TouchActions(this);
     public interface ITouchMapActions
     {
         void OnPrimaryContactAction(InputAction.CallbackContext context);
         void OnPrimaryTouchPosition(InputAction.CallbackContext context);
+    }
+    public interface ITouchActions
+    {
+        void OnSecondaryFingerTouch(InputAction.CallbackContext context);
+        void OnPrimaryFingerPosition(InputAction.CallbackContext context);
+        void OnSecondaryScreenContact(InputAction.CallbackContext context);
     }
 }
