@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/PuzzleScene.unity
     guid: ac6dce6219d5b15468de6a9b983f8048
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Touch Input.unity
     guid: eb2f2828cd9f9ae498d665133a1685c1
   - enabled: 1

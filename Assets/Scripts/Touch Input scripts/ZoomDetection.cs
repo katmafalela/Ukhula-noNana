@@ -1,19 +1,20 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
 
-public class PinchDetection : MonoBehaviour
+public class ZoomDetection : MonoBehaviour
 {
     [SerializeField]
     private float CameraSpeed = 4f;
 
-    private InputActions controls;
-    private Coroutine ZoomCoroutine;
+    private TouchControls controls;
+    private Coroutine zoomCoroutine;
     private Transform cameraTransform;
 
     private void Awake()
     {
-        controls = new InputActions(); // Create a new instance of InputActions
+        controls = new TouchControls(); // Create a new instance of InputActions
+        cameraTransform = Camera.main.transform; // Get the main camera transform
     }
 
     private void OnEnable()
@@ -29,30 +30,31 @@ public class PinchDetection : MonoBehaviour
     private void Start()
     {
         // Subscribe to the touch events for zooming
-        controls.Touch.SecondaryScreenContact.started += _ => ZoomStart();
-        controls.Touch.SecondaryScreenContact.started += _ => ZoomEnd();
+        controls.Touch.SecondaryTouchContact.started += _ => ZoomStart();
+        controls.Touch.SecondaryTouchContact.canceled += _ => ZoomEnd();
     }
 
     private void ZoomStart()
     {
-        ZoomCoroutine = StartCoroutine(ZoomDetection()); // Start the zoom detection coroutine
+        zoomCoroutine = StartCoroutine(DetectZooming()); // Start the zoom detection coroutine
     }
 
     private void ZoomEnd()
     {
-        StopCoroutine(ZoomCoroutine); // Stop the zoom detection coroutine
+        StopCoroutine(zoomCoroutine); // Stop the zoom detection coroutine
     }
 
-    IEnumerator ZoomDetection()
+    IEnumerator DetectZooming()
     {
-        float prevDistance = 0f;
+        float prevDistance = Vector2.Distance(controls.Touch.PrimaryFingerPosition.ReadValue<Vector2>(),
+            controls.Touch.SecondaryFingerPosition.ReadValue<Vector2>());
         float currentDistance = 0f;
 
         while (true)
         {
             // Calculate the distance between the primary and secondary finger positions
             currentDistance = Vector2.Distance(controls.Touch.PrimaryFingerPosition.ReadValue<Vector2>(),
-                controls.Touch.SecondaryFingerTouch.ReadValue<Vector2>());
+                controls.Touch.SecondaryFingerPosition.ReadValue<Vector2>());
 
             // Zoom in
             if (currentDistance < prevDistance)
