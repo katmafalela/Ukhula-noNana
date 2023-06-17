@@ -21,7 +21,6 @@ public class SwipeDetection : MonoBehaviour
 
     private void Awake()
     {
-        //Try this instead of Singleton
         inputManager = GetComponent<InputManager>();
     }
 
