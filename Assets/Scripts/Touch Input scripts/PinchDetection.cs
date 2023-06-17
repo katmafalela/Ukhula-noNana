@@ -1,84 +1,68 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PinchDetection : MonoBehaviour
 {
-    [SerializeField]
-    private float CameraSpeed = 4f;
-    /*
-    private TouchControls inputActions;
     private InputManager inputManager;
-
-    private Coroutine zoomCoroutine;
-    private Transform cameraTransform;
 
     private void Awake()
     {
-        //inputActions = new TouchControls(); // Create a new instance of InputActions
         inputManager = GetComponent<InputManager>();
-
-        cameraTransform = Camera.main.transform; // Get the main camera transform
     }
-    
-    private void OnEnable()
+
+    /*private void OnEnable()
     {
-        inputActions.Enable(); // Enable the input actions
+        inputManager.OnStartTouch += ZoomStart; //Subscribing (+=) to inputManager's OnStartTouch event to make touch & "pinch's" time & pos relative each other
+        inputManager.OnEndTouch += ZoomEnd; //Subscribing (+=) to inputManager's OnEndTouch event to make touch & swipe's time & last pos before finger lift relative to each other
     }
 
     private void OnDisable()
     {
-        inputActions.Disable(); // Disable the input actions
-    }
-
-    private void Start()
-    {
-        // Subscribe to the touch events for zooming
-        inputActions.Touch.SecondaryTouchContact.started += _ => ZoomStart();
-        inputActions.Touch.SecondaryTouchContact.canceled += _ => ZoomEnd();
+        inputManager.OnStartTouch -= ZoomStart; //unsubscribing (-=) from inputManager's OnStartSecondaryTouch event  
+        inputManager.OnEndTouch -= ZoomEnd; //unsubscribing (-=) from inputManager's OnEndSecondaryTouch event
     }
 
     private void ZoomStart()
     {
-        zoomCoroutine = StartCoroutine(DetectZooming()); // Start the zoom detection coroutine
+        StartCoroutine(ZoomDetection());
     }
 
     private void ZoomEnd()
     {
-        StopCoroutine(zoomCoroutine); // Stop the zoom detection coroutine
+        StopCoroutine(ZoomDetection());
     }
 
-    IEnumerator DetectZooming()
+    IEnumerator ZoomDetection()
     {
-        float prevDistance = Vector2.Distance(inputActions.Touch.PrimaryFingerPosition.ReadValue<Vector2>(),
-            inputActions.Touch.SecondaryFingerPosition.ReadValue<Vector2>());
+        float previousDistance = 0f;
         float currentDistance = 0f;
 
-        while (true)
+        while (true) //while secondaryTouchContact
         {
-            // Calculate the distance between the primary and secondary finger positions
-            currentDistance = Vector2.Distance(inputActions.Touch.PrimaryFingerPosition.ReadValue<Vector2>(),
-                inputActions.Touch.SecondaryFingerPosition.ReadValue<Vector2>());
+            currentDistance = Vector2.Distance(primaryTouchPosition.ReadValue<Vector2>(), secondaryTouchPosition.ReadValue<Vector2>());
 
-            // Zoom in
-            if (currentDistance < prevDistance)
+            //"pinch" out
+            if (currentDistance > previousDistance)
             {
-                Vector3 targetPosition = cameraTransform.position;
-                targetPosition.z += 1;
-                cameraTransform.position = Vector3.Slerp(cameraTransform.position, targetPosition, Time.deltaTime * CameraSpeed);
-            }
-            // Zoom out
-            else if (currentDistance > prevDistance)
-            {
-                Vector3 targetPosition = cameraTransform.position;
-                targetPosition.z -= 1;
-                cameraTransform.position = Vector3.Slerp(cameraTransform.position, targetPosition, Time.deltaTime * CameraSpeed);
+                float targetSize = mainCamera.orthographicSize - 1f; //decrease to zoom in
+                float minTargetSize = Mathf.Clamp(targetSize, 0.01f, mainCamera.orthographicSize); //small value instead of 0 to prevent screen position from being out of view frustrum
+                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, minTargetSize, Time.deltaTime * zoomSpeed);
+
             }
 
-            // Update the previous distance for the next iteration
-            prevDistance = currentDistance;
-            yield return null;
+            //pinch in
+            else if (currentDistance < previousDistance)
+            {
+                float targetSize = mainCamera.orthographicSize + 1f; //increase to zoom out
+                float maxTargetSize = Mathf.Clamp(targetSize, mainCamera.orthographicSize, 30f);
+                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, maxTargetSize, Time.deltaTime * zoomSpeed);
+            }
+
+            previousDistance = currentDistance; // Updating the previous distance for the next loop
+
+            yield return null; //waiting till next frame to continue executing loop
         }
+
     }
     */
 }

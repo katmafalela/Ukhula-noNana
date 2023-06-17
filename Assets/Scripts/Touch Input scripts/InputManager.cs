@@ -1,4 +1,3 @@
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,8 +13,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     public event OnEndTouchDelegate OnEndTouch;
     #endregion
 
-    [SerializeField] private GameObject circle; //for debugging
-
     private PlayerInput playerInput;
 
     private InputAction primaryTouchContact;
@@ -24,7 +21,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     private InputAction secondaryTouchPosition;
 
     [SerializeField] private float zoomSpeed = 10f;
-    private Coroutine zoomCoroutine; //do this in traditional way
     private Camera mainCamera;
 
 
@@ -43,7 +39,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     // Start is called before the first frame update
     void Start()
     {
-        //method without player input component
         primaryTouchContact.started += context => StartPrimaryTouch(context); //Subscribing (+=) to OnStartTouch event (through StartPrimaryTouch) when start touching screen to get event info (context) 
         primaryTouchContact.canceled += context => EndPrimaryTouch(context); //Subscribing (+=) to OnEndTouch event (through EndPrimaryTouch) when stop touching screen to get event info (context) 
 
@@ -66,7 +61,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         }
     }*/
 
-     private void StartPrimaryTouch(InputAction.CallbackContext context)
+    private void StartPrimaryTouch(InputAction.CallbackContext context)
     {
 
         if (OnStartTouch != null) //checking if event has been subscribed to
@@ -93,46 +88,55 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         return new Vector2(worldTouchPosition.x, worldTouchPosition.y);
     }
 
+    /*private void StartSecondaryTouch(InputAction.CallbackContext context)
+    {
+
+        if (OnStartTouch != null) //checking if event has been subscribed to
+        {
+            //getting touch position & time during event
+            OnStartTouch(PrimaryTouchPosition(), (float)context.time);
+        }
+    }*/
+
+
+
     private void ZoomStart()
     {
-        zoomCoroutine = StartCoroutine(ZoomDetection()); // Start the zoom detection coroutine
+        StartCoroutine(ZoomDetection()); 
     }
 
     private void ZoomEnd()
     {
-        StopCoroutine(zoomCoroutine); // Stop the zoom detection coroutine
+        StopCoroutine(ZoomDetection());
     }
 
     IEnumerator ZoomDetection()
     {
-
-
-        float previousDistance = 0f;//Vector2.Distance(primaryTouchPosition.ReadValue<Vector2>(), secondaryTouchPosition.ReadValue<Vector2>());
+        float previousDistance = 0f;
         float currentDistance = 0f;
 
-        while (true) //while finger down
+        while (true) //while secondaryTouchContact
         {
             currentDistance = Vector2.Distance(primaryTouchPosition.ReadValue<Vector2>(), secondaryTouchPosition.ReadValue<Vector2>());
 
-            //zoom in
+            //"pinch" out
             if (currentDistance > previousDistance)
             {
-                //camera.orthographicSize--;
-                float targetSize = mainCamera.orthographicSize - 1f; 
-                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, Time.deltaTime * zoomSpeed);
-                //print("zoomIn");
+                float targetSize = mainCamera.orthographicSize - 1f; //decrease to zoom in
+                float minTargetSize = Mathf.Clamp(targetSize, 0.01f, mainCamera.orthographicSize); //small value instead of 0 to prevent screen position from being out of view frustrum
+                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, minTargetSize, Time.deltaTime * zoomSpeed);
+
             }
 
-            //zoom out
+            //pinch in
             else if (currentDistance < previousDistance)
             {
-                //camera.orthographicSize++;
-                float targetSize = mainCamera.orthographicSize + 1f;
-                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, Time.deltaTime * zoomSpeed);
-                //print("zoomOut");
+                float targetSize = mainCamera.orthographicSize + 1f; //increase to zoom out
+                float maxTargetSize = Mathf.Clamp(targetSize, mainCamera.orthographicSize, 30f);
+                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, maxTargetSize, Time.deltaTime * zoomSpeed);
             }
 
-            previousDistance = currentDistance;// Updating the previous distance for the next loop
+            previousDistance = currentDistance; // Updating the previous distance for the next loop
 
             yield return null; //waiting till next frame to continue executing loop
         }
