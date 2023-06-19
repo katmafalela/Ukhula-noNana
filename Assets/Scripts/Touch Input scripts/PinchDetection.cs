@@ -3,31 +3,22 @@ using UnityEngine;
 
 public class PinchDetection : MonoBehaviour
 {
+    [SerializeField] private float zoomSpeed = 10f;
     private InputManager inputManager;
+    private Camera mainCamera;
 
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
+        mainCamera = Camera.main;
     }
 
-    /*private void OnEnable()
-    {
-        inputManager.OnStartTouch += ZoomStart; //Subscribing (+=) to inputManager's OnStartTouch event to make touch & "pinch's" time & pos relative each other
-        inputManager.OnEndTouch += ZoomEnd; //Subscribing (+=) to inputManager's OnEndTouch event to make touch & swipe's time & last pos before finger lift relative to each other
-    }
-
-    private void OnDisable()
-    {
-        inputManager.OnStartTouch -= ZoomStart; //unsubscribing (-=) from inputManager's OnStartSecondaryTouch event  
-        inputManager.OnEndTouch -= ZoomEnd; //unsubscribing (-=) from inputManager's OnEndSecondaryTouch event
-    }
-
-    private void ZoomStart()
+    public void ZoomStart()
     {
         StartCoroutine(ZoomDetection());
     }
 
-    private void ZoomEnd()
+    public void ZoomEnd()
     {
         StopCoroutine(ZoomDetection());
     }
@@ -39,7 +30,7 @@ public class PinchDetection : MonoBehaviour
 
         while (true) //while secondaryTouchContact
         {
-            currentDistance = Vector2.Distance(primaryTouchPosition.ReadValue<Vector2>(), secondaryTouchPosition.ReadValue<Vector2>());
+            currentDistance = Vector2.Distance(inputManager.PrimaryTouchPosition(), inputManager.SecondaryTouchPosition());
 
             //"pinch" out
             if (currentDistance > previousDistance)
@@ -64,5 +55,4 @@ public class PinchDetection : MonoBehaviour
         }
 
     }
-    */
 }

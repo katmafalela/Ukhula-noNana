@@ -8,20 +8,21 @@ public class SwipeDetection : MonoBehaviour
     [SerializeField, Range(0f,1f)] private float swipeDirectionSimilarityPercentage = 0.9f;
 
     [SerializeField] private GameObject swipeTrail;
-    [SerializeField] private GameObject circle; //for debugging
-    [SerializeField] private float minCircleSlotDistance = 1f;
+    //[SerializeField] private float minCircleSlotDistance = 1f;
 
     private InputManager inputManager;
+    private DropInToSlot dropInToSlot;
     private Vector2 startPosition;
     private float startTime;
     private Vector2 endPosition;
     private float endTime;
 
-    private Vector3[] totalSlotPositions; 
+    //private Vector3[] totalSlotPositions; 
 
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
+        dropInToSlot = GetComponent<DropInToSlot>();
     }
 
     private void OnEnable()
@@ -41,7 +42,7 @@ public class SwipeDetection : MonoBehaviour
         startPosition = position;
         startTime = time;
 
-        GetSlotPositions(); // Call to initialize slot positions
+        dropInToSlot.GetSlotPositions(); // Call to initialize slot positions
 
         //enabling trail
         swipeTrail.SetActive(true);
@@ -54,10 +55,10 @@ public class SwipeDetection : MonoBehaviour
     {
         while (true) 
         {
-            swipeTrail.transform.position = inputManager.PrimaryTouchPosition(); 
-            circle.transform.position = inputManager.PrimaryTouchPosition();
+            swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition(); 
+            dropInToSlot.circle.transform.position = inputManager.WorldPrimaryTouchPosition();
 
-            DropIntoSlot();
+            dropInToSlot.Drop();
 
             yield return null; //waiting for next frame to update trail's position
         }
@@ -111,7 +112,7 @@ public class SwipeDetection : MonoBehaviour
         }
     }
 
-    private void GetSlotPositions()
+    /*private void GetSlotPositions()
     {
         GameObject[] totalSlots = GameObject.FindGameObjectsWithTag("Slot1");
         totalSlotPositions = new Vector3[totalSlots.Length]; //total stored positions = total game objects found
@@ -135,5 +136,5 @@ public class SwipeDetection : MonoBehaviour
                 break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
             }
         }
-    }
+    }*/
 }

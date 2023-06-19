@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     #endregion
 
     private PlayerInput playerInput;
+    private PinchDetection pinchDetection;
 
     private InputAction primaryTouchContact;
     private InputAction secondaryTouchContact;
@@ -27,6 +28,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        pinchDetection = GetComponent<PinchDetection>();
 
         primaryTouchContact = playerInput.actions["PrimaryTouchContact"];
         primaryTouchPosition = playerInput.actions["PrimaryTouchPosition"];
@@ -43,9 +45,9 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         primaryTouchContact.canceled += context => EndPrimaryTouch(context); //Subscribing (+=) to OnEndTouch event (through EndPrimaryTouch) when stop touching screen to get event info (context) 
 
         secondaryTouchContact.started += _ => ZoomStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
-        //inputManager.OnStartSecondaryTouch += ZoomStart(); //Subscribing (+=) to inputManager's OnStartTouch event (unless another event) when start touching screen, but ignoring parameter passed in (_) (coz just cheking for touch)
         secondaryTouchContact.canceled += _ => ZoomEnd();
-        //inputManager.OnEndSecondaryTouch += SwipeEnd; //Subscribing (+=) to inputManager's OnEndTouch event to make touch & swipe's time & last pos before finger lift relative to each other
+        //secondaryTouchContact.started += _ => pinchDetection.ZoomStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
+        //secondaryTouchContact.canceled += _ => pinchDetection.ZoomEnd();
     }
 
     /*private void Update() //instead of events
@@ -67,7 +69,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         if (OnStartTouch != null) //checking if event has been subscribed to
         {
             //getting touch position & time during event
-            OnStartTouch(PrimaryTouchPosition(), (float)context.time);
+            OnStartTouch(WorldPrimaryTouchPosition(), (float)context.time);
         }
     }
 
@@ -76,11 +78,11 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         if (OnEndTouch != null) //if event has been subscribed to
         {
             //getting touch position & time during event
-            OnEndTouch(PrimaryTouchPosition(), (float)context.time);
+            OnEndTouch(WorldPrimaryTouchPosition(), (float)context.time);
         }
     }
 
-    public Vector2 PrimaryTouchPosition() //World coordinates (min = -1f; max = 1f)
+    public Vector2 WorldPrimaryTouchPosition() //World coordinates (min = -1f; max = 1f)
     {
         Vector2 touchPosition = primaryTouchPosition.ReadValue<Vector2>();
         Vector3 screenTouchPosition = new Vector3(touchPosition.x, touchPosition.y, mainCamera.nearClipPlane); //making z coordinate relative to nearest point that camera can see stuff (beyond this position)
@@ -88,18 +90,30 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         return new Vector2(worldTouchPosition.x, worldTouchPosition.y);
     }
 
-    /*private void StartSecondaryTouch(InputAction.CallbackContext context)
+    public Vector2 PrimaryTouchPosition()
     {
+        Vector2 touchPosition = primaryTouchPosition.ReadValue<Vector2>();
+        return new Vector2();
+    }
 
-        if (OnStartTouch != null) //checking if event has been subscribed to
+    public Vector2 SecondaryTouchPosition()
+    {
+        Vector2 touchPosition = secondaryTouchPosition.ReadValue<Vector2>();
+        return new Vector2();
+    }
+
+        /*private void StartSecondaryTouch(InputAction.CallbackContext context)
         {
-            //getting touch position & time during event
-            OnStartTouch(PrimaryTouchPosition(), (float)context.time);
-        }
-    }*/
+
+            if (OnStartTouch != null) //checking if event has been subscribed to
+            {
+                //getting touch position & time during event
+                OnStartTouch(PrimaryTouchPosition(), (float)context.time);
+            }
+        }*/
 
 
-
+    
     private void ZoomStart()
     {
         StartCoroutine(ZoomDetection()); 
@@ -142,5 +156,5 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         }
 
     }
-
+    
 }
