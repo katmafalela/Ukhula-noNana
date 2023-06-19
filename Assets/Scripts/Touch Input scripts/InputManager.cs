@@ -1,9 +1,7 @@
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 //using static UnityEngine.UIElements.UxmlAttributeDescription;
-
-//[DefaultExecutionOrder(-1)] //ensuring this script runs before any other script
 
 public class InputManager : MonoBehaviour //Singleton<InputManager> //Making script/class a singleton (making it easier for other scripts to access it without need to reference it) 
 {
@@ -15,29 +13,39 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     public event OnEndTouchDelegate OnEndTouch;
     #endregion
 
-    [SerializeField] private GameObject circle; //for debugging
-
     private PlayerInput playerInput;
 
-    private InputAction primaryContactAction;
-    private InputAction primaryTouchPositionAction;
+    private InputAction primaryTouchContact;
+    private InputAction secondaryTouchContact;
+    private InputAction primaryTouchPosition;
+    private InputAction secondaryTouchPosition;
+
+    [SerializeField] private float zoomSpeed = 10f;
+    private Camera mainCamera;
 
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
 
-        primaryContactAction = playerInput.actions["PrimaryContactAction"];
-        primaryTouchPositionAction = playerInput.actions["PrimaryTouchPosition"];
+        primaryTouchContact = playerInput.actions["PrimaryTouchContact"];
+        primaryTouchPosition = playerInput.actions["PrimaryTouchPosition"];
+        secondaryTouchContact = playerInput.actions["SecondaryTouchContact"];
+        secondaryTouchPosition = playerInput.actions["SecondaryTouchPosition"];
 
+        mainCamera = Camera.main;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //method without player input component
-        primaryContactAction.started += context => StartPrimaryTouch(context); //Subscribing (+=) to OnStartTouch event (through StartPrimaryTouch) when start touching screen to get event info (context) 
-        primaryContactAction.canceled += context => EndPrimaryTouch(context); //Subscribing (+=) to OnEndTouch event (through EndPrimaryTouch) when stop touching screen to get event info (context) 
+        primaryTouchContact.started += context => StartPrimaryTouch(context); //Subscribing (+=) to OnStartTouch event (through StartPrimaryTouch) when start touching screen to get event info (context) 
+        primaryTouchContact.canceled += context => EndPrimaryTouch(context); //Subscribing (+=) to OnEndTouch event (through EndPrimaryTouch) when stop touching screen to get event info (context) 
+
+        secondaryTouchContact.started += _ => ZoomStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
+        //inputManager.OnStartSecondaryTouch += ZoomStart(); //Subscribing (+=) to inputManager's OnStartTouch event (unless another event) when start touching screen, but ignoring parameter passed in (_) (coz just cheking for touch)
+        secondaryTouchContact.canceled += _ => ZoomEnd();
+        //inputManager.OnEndSecondaryTouch += SwipeEnd; //Subscribing (+=) to inputManager's OnEndTouch event to make touch & swipe's time & last pos before finger lift relative to each other
     }
 
     /*private void Update() //instead of events
@@ -53,7 +61,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         }
     }*/
 
-     private void StartPrimaryTouch(InputAction.CallbackContext context)
+    private void StartPrimaryTouch(InputAction.CallbackContext context)
     {
 
         if (OnStartTouch != null) //checking if event has been subscribed to
@@ -74,10 +82,65 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
 
     public Vector2 PrimaryTouchPosition() //World coordinates (min = -1f; max = 1f)
     {
-        Vector2 touchPosition = primaryTouchPositionAction.ReadValue<Vector2>();
-        Vector3 screenTouchPosition = new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane); //making z coordinate relative to nearest point that camera can see stuff (beyond this position)
+        Vector2 touchPosition = primaryTouchPosition.ReadValue<Vector2>();
+        Vector3 screenTouchPosition = new Vector3(touchPosition.x, touchPosition.y, mainCamera.nearClipPlane); //making z coordinate relative to nearest point that camera can see stuff (beyond this position)
         Vector3 worldTouchPosition = Camera.main.ScreenToWorldPoint(screenTouchPosition);
         return new Vector2(worldTouchPosition.x, worldTouchPosition.y);
+    }
+
+    /*private void StartSecondaryTouch(InputAction.CallbackContext context)
+    {
+
+        if (OnStartTouch != null) //checking if event has been subscribed to
+        {
+            //getting touch position & time during event
+            OnStartTouch(PrimaryTouchPosition(), (float)context.time);
+        }
+    }*/
+
+
+
+    private void ZoomStart()
+    {
+        StartCoroutine(ZoomDetection()); 
+    }
+
+    private void ZoomEnd()
+    {
+        StopCoroutine(ZoomDetection());
+    }
+
+    IEnumerator ZoomDetection()
+    {
+        float previousDistance = 0f;
+        float currentDistance = 0f;
+
+        while (true) //while secondaryTouchContact
+        {
+            currentDistance = Vector2.Distance(primaryTouchPosition.ReadValue<Vector2>(), secondaryTouchPosition.ReadValue<Vector2>());
+
+            //"pinch" out
+            if (currentDistance > previousDistance)
+            {
+                float targetSize = mainCamera.orthographicSize - 1f; //decrease to zoom in
+                float minTargetSize = Mathf.Clamp(targetSize, 0.01f, mainCamera.orthographicSize); //small value instead of 0 to prevent screen position from being out of view frustrum
+                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, minTargetSize, Time.deltaTime * zoomSpeed);
+
+            }
+
+            //pinch in
+            else if (currentDistance < previousDistance)
+            {
+                float targetSize = mainCamera.orthographicSize + 1f; //increase to zoom out
+                float maxTargetSize = Mathf.Clamp(targetSize, mainCamera.orthographicSize, 30f);
+                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, maxTargetSize, Time.deltaTime * zoomSpeed);
+            }
+
+            previousDistance = currentDistance; // Updating the previous distance for the next loop
+
+            yield return null; //waiting till next frame to continue executing loop
+        }
+
     }
 
 }

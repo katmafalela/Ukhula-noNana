@@ -1,17 +1,13 @@
 using System.Collections;
-using System.Drawing;
-using Unity.Burst.Intrinsics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SwipeDetection : MonoBehaviour
 {
-    public GameObject circle;
-
     [SerializeField] private float minDistance = 0.2f;
     [SerializeField] private float maxTime = 1f;
     [SerializeField, Range(0f,1f)] private float swipeDirectionSimilarityPercentage = 0.9f;
     [SerializeField] private GameObject swipeTrail;
+    [SerializeField] private GameObject circle; //for debugging
 
     private InputManager inputManager;
     private Vector2 startPosition;
@@ -21,7 +17,6 @@ public class SwipeDetection : MonoBehaviour
 
     private void Awake()
     {
-        //Try this instead of Singleton
         inputManager = GetComponent<InputManager>();
     }
 
