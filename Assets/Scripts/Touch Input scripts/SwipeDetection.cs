@@ -6,14 +6,18 @@ public class SwipeDetection : MonoBehaviour
     [SerializeField] private float minDistance = 0.2f;
     [SerializeField] private float maxTime = 1f;
     [SerializeField, Range(0f,1f)] private float swipeDirectionSimilarityPercentage = 0.9f;
+
     [SerializeField] private GameObject swipeTrail;
     [SerializeField] private GameObject circle; //for debugging
+    [SerializeField] private float minCircleSlotDistance = 1f;
 
     private InputManager inputManager;
     private Vector2 startPosition;
     private float startTime;
     private Vector2 endPosition;
     private float endTime;
+
+    private Vector3[] totalSlotPositions; 
 
     private void Awake()
     {
@@ -37,19 +41,24 @@ public class SwipeDetection : MonoBehaviour
         startPosition = position;
         startTime = time;
 
+        GetSlotPositions(); // Call to initialize slot positions
+
         //enabling trail
         swipeTrail.SetActive(true);
         //swipeTrail.transform.position = position; //redundant?
-        StartCoroutine(UpdateTrailPosition());
+        StartCoroutine(FollowSwipe());
     }
 
     //moving soemthing relative to touch position
-    private IEnumerator UpdateTrailPosition()
+    private IEnumerator FollowSwipe()
     {
         while (true) 
         {
-            swipeTrail.transform.position = inputManager.PrimaryTouchPosition();
+            swipeTrail.transform.position = inputManager.PrimaryTouchPosition(); 
             circle.transform.position = inputManager.PrimaryTouchPosition();
+
+            DropIntoSlot();
+
             yield return null; //waiting for next frame to update trail's position
         }
     }
@@ -62,8 +71,7 @@ public class SwipeDetection : MonoBehaviour
 
         //disabling trail
         swipeTrail.SetActive(false);
-        StopCoroutine(UpdateTrailPosition());
-        //StopCoroutine(coroutine);
+        StopCoroutine(FollowSwipe());
     }
 
     private void DetectSwipe()
@@ -81,7 +89,7 @@ public class SwipeDetection : MonoBehaviour
 
     }
 
-    //standardizing swipe direction to up/down/left/right
+    //standardizing swipe direction to up/down/left/right (for quick swipes)
     private void StandardizeSwipeDirection (Vector2 swipeDirection2D) 
     {
         //Comparing how similar swipe direction is to up/down/left/right; using dot product (see API)
@@ -100,6 +108,32 @@ public class SwipeDetection : MonoBehaviour
         else if (Vector2.Dot(Vector2.right, swipeDirection2D) > swipeDirectionSimilarityPercentage)
         {
             print("Swipe right -> do something");
+        }
+    }
+
+    private void GetSlotPositions()
+    {
+        GameObject[] totalSlots = GameObject.FindGameObjectsWithTag("Slot1");
+        totalSlotPositions = new Vector3[totalSlots.Length]; //total stored positions = total game objects found
+
+        for (int slotPosition = 0; slotPosition < totalSlots.Length; slotPosition++) //for so long as there's more than 1 slot
+        {
+            totalSlotPositions[slotPosition] = totalSlots[slotPosition].transform.position; //each stored position = position of each slot found
+        }
+    }
+
+    private void DropIntoSlot()
+    {
+        //checking if circle is close enough to drop in slot 
+        foreach (Vector3 slotPosition in totalSlotPositions)
+        {
+            float circleSlotDistance = Vector3.Distance(circle.transform.position, slotPosition);
+            if (circleSlotDistance <= minCircleSlotDistance)
+            {
+                //DropIntoSlot(slotPosition);
+                circle.transform.position = slotPosition;
+                break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
+            }
         }
     }
 }
