@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DropInToSlot : MonoBehaviour
+public class DragNDrop : MonoBehaviour
 {
-    public GameObject circle; //for debugging
+    public GameObject dragableObject; //for debugging
     [SerializeField] private float minCircleSlotDistance = 1f;
 
     private Vector3[] totalSlotPositions;
@@ -20,16 +20,16 @@ public class DropInToSlot : MonoBehaviour
         }
     }
 
-    public void Drop()
+    public void DropIntoSlot()
     {
         //checking if circle is close enough to drop in slot 
         foreach (Vector3 slotPosition in totalSlotPositions)
         {
-            float circleSlotDistance = Vector3.Distance(circle.transform.position, slotPosition);
+            float circleSlotDistance = Vector3.Distance(dragableObject.transform.position, slotPosition);
             if (circleSlotDistance <= minCircleSlotDistance)
             {
                 //DropIntoSlot(slotPosition);
-                circle.transform.position = slotPosition;
+                dragableObject.transform.position = slotPosition;
                 break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
             }
         }

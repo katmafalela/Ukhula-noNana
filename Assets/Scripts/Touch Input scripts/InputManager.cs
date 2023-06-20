@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     #endregion
 
     private PlayerInput playerInput;
-    private PinchDetection pinchDetection;
+    private Zoom zoom;
 
     private InputAction primaryTouchContact;
     private InputAction secondaryTouchContact;
@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-        pinchDetection = GetComponent<PinchDetection>();
+        zoom = GetComponent<Zoom>();
 
         primaryTouchContact = playerInput.actions["PrimaryTouchContact"];
         primaryTouchPosition = playerInput.actions["PrimaryTouchPosition"];
@@ -44,8 +44,8 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         primaryTouchContact.started += context => StartPrimaryTouch(context); //Subscribing (+=) to OnStartTouch event (through StartPrimaryTouch) when start touching screen to get event info (context) 
         primaryTouchContact.canceled += context => EndPrimaryTouch(context); //Subscribing (+=) to OnEndTouch event (through EndPrimaryTouch) when stop touching screen to get event info (context) 
 
-        secondaryTouchContact.started += _ => ZoomStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
-        secondaryTouchContact.canceled += _ => ZoomEnd();
+        secondaryTouchContact.started += _ => PinchStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
+        secondaryTouchContact.canceled += _ => PinchEnd();
         //secondaryTouchContact.started += _ => pinchDetection.ZoomStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
         //secondaryTouchContact.canceled += _ => pinchDetection.ZoomEnd();
     }
@@ -82,24 +82,12 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
         }
     }
 
-    public Vector2 WorldPrimaryTouchPosition() //World coordinates (min = -1f; max = 1f)
+    public Vector2 WorldPrimaryTouchPosition()
     {
         Vector2 touchPosition = primaryTouchPosition.ReadValue<Vector2>();
         Vector3 screenTouchPosition = new Vector3(touchPosition.x, touchPosition.y, mainCamera.nearClipPlane); //making z coordinate relative to nearest point that camera can see stuff (beyond this position)
         Vector3 worldTouchPosition = Camera.main.ScreenToWorldPoint(screenTouchPosition);
         return new Vector2(worldTouchPosition.x, worldTouchPosition.y);
-    }
-
-    public Vector2 PrimaryTouchPosition()
-    {
-        Vector2 touchPosition = primaryTouchPosition.ReadValue<Vector2>();
-        return new Vector2();
-    }
-
-    public Vector2 SecondaryTouchPosition()
-    {
-        Vector2 touchPosition = secondaryTouchPosition.ReadValue<Vector2>();
-        return new Vector2();
     }
 
         /*private void StartSecondaryTouch(InputAction.CallbackContext context)
@@ -112,45 +100,39 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
             }
         }*/
 
-
-    
-    private void ZoomStart()
+    private void PinchStart()
     {
-        StartCoroutine(ZoomDetection()); 
+        StartCoroutine(PinchDetection()); 
     }
 
-    private void ZoomEnd()
+    private void PinchEnd()
     {
-        StopCoroutine(ZoomDetection());
+        StopCoroutine(PinchDetection());
     }
 
-    IEnumerator ZoomDetection()
+    IEnumerator PinchDetection()
     {
-        float previousDistance = 0f;
-        float currentDistance = 0f;
+        float pinchDistance = 0f;
+        float previousPinchDistance = 0f;
 
         while (true) //while secondaryTouchContact
         {
-            currentDistance = Vector2.Distance(primaryTouchPosition.ReadValue<Vector2>(), secondaryTouchPosition.ReadValue<Vector2>());
+            pinchDistance = Vector2.Distance(primaryTouchPosition.ReadValue<Vector2>(), secondaryTouchPosition.ReadValue<Vector2>());
 
             //"pinch" out
-            if (currentDistance > previousDistance)
+            if (pinchDistance > previousPinchDistance)
             {
-                float targetSize = mainCamera.orthographicSize - 1f; //decrease to zoom in
-                float minTargetSize = Mathf.Clamp(targetSize, 0.01f, mainCamera.orthographicSize); //small value instead of 0 to prevent screen position from being out of view frustrum
-                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, minTargetSize, Time.deltaTime * zoomSpeed);
+                zoom.ZoomIn(); 
 
             }
 
             //pinch in
-            else if (currentDistance < previousDistance)
+            else if (pinchDistance < previousPinchDistance)
             {
-                float targetSize = mainCamera.orthographicSize + 1f; //increase to zoom out
-                float maxTargetSize = Mathf.Clamp(targetSize, mainCamera.orthographicSize, 30f);
-                mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, maxTargetSize, Time.deltaTime * zoomSpeed);
+                zoom.ZoomOut();
             }
 
-            previousDistance = currentDistance; // Updating the previous distance for the next loop
+            previousPinchDistance = pinchDistance; // Updating the previous distance for the next loop
 
             yield return null; //waiting till next frame to continue executing loop
         }

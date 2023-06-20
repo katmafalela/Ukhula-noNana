@@ -8,21 +8,18 @@ public class SwipeDetection : MonoBehaviour
     [SerializeField, Range(0f,1f)] private float swipeDirectionSimilarityPercentage = 0.9f;
 
     [SerializeField] private GameObject swipeTrail;
-    //[SerializeField] private float minCircleSlotDistance = 1f;
 
     private InputManager inputManager;
-    private DropInToSlot dropInToSlot;
+    private DragNDrop dropInToSlot;
     private Vector2 startPosition;
     private float startTime;
     private Vector2 endPosition;
     private float endTime;
 
-    //private Vector3[] totalSlotPositions; 
-
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
-        dropInToSlot = GetComponent<DropInToSlot>();
+        dropInToSlot = GetComponent<DragNDrop>();
     }
 
     private void OnEnable()
@@ -56,9 +53,9 @@ public class SwipeDetection : MonoBehaviour
         while (true) 
         {
             swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition(); 
-            dropInToSlot.circle.transform.position = inputManager.WorldPrimaryTouchPosition();
+            dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();
 
-            dropInToSlot.Drop();
+            dropInToSlot.DropIntoSlot();
 
             yield return null; //waiting for next frame to update trail's position
         }
@@ -111,30 +108,4 @@ public class SwipeDetection : MonoBehaviour
             print("Swipe right -> do something");
         }
     }
-
-    /*private void GetSlotPositions()
-    {
-        GameObject[] totalSlots = GameObject.FindGameObjectsWithTag("Slot1");
-        totalSlotPositions = new Vector3[totalSlots.Length]; //total stored positions = total game objects found
-
-        for (int slotPosition = 0; slotPosition < totalSlots.Length; slotPosition++) //for so long as there's more than 1 slot
-        {
-            totalSlotPositions[slotPosition] = totalSlots[slotPosition].transform.position; //each stored position = position of each slot found
-        }
-    }
-
-    private void DropIntoSlot()
-    {
-        //checking if circle is close enough to drop in slot 
-        foreach (Vector3 slotPosition in totalSlotPositions)
-        {
-            float circleSlotDistance = Vector3.Distance(circle.transform.position, slotPosition);
-            if (circleSlotDistance <= minCircleSlotDistance)
-            {
-                //DropIntoSlot(slotPosition);
-                circle.transform.position = slotPosition;
-                break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
-            }
-        }
-    }*/
 }
