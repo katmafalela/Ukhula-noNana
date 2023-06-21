@@ -314,6 +314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 756810447}
   - component: {fileID: 756810446}
+  - component: {fileID: 756810448}
   m_Layer: 0
   m_Name: ZoomDetecter
   m_TagString: Untagged
@@ -333,7 +334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615a748c4ab9de64a92140e7d9e84bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraSpeed: 4
 --- !u!4 &756810447
 Transform:
   m_ObjectHideFlags: 0
@@ -349,6 +349,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &756810448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756810445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc08dfacecfd1494ca9004686b58f5aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomSpeed: 10
 --- !u!1 &2048422405
 GameObject:
   m_ObjectHideFlags: 0
