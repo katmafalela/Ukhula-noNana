@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DragNDrop : MonoBehaviour
 {
-    public GameObject dragableObject; //for debugging
+    public GameObject dragableObject; //use FindGameObjectsWithTag for multiple draggable objects. 
+    [SerializeField] private GameObject matchText;
     [SerializeField] private float minCircleSlotDistance = 1f;
 
     private Vector3[] totalSlotPositions;
@@ -25,12 +26,17 @@ public class DragNDrop : MonoBehaviour
         //checking if circle is close enough to drop in slot 
         foreach (Vector3 slotPosition in totalSlotPositions)
         {
-            float circleSlotDistance = Vector3.Distance(dragableObject.transform.position, slotPosition);
-            if (circleSlotDistance <= minCircleSlotDistance)
+            float objectToSlotDistance = Vector3.Distance(dragableObject.transform.position, slotPosition);
+            if (objectToSlotDistance <= minCircleSlotDistance)
             {
                 //DropIntoSlot(slotPosition);
                 dragableObject.transform.position = slotPosition;
+                matchText.SetActive(true);
                 break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
+            }
+            else
+            {
+                matchText.SetActive(false);
             }
         }
     }
