@@ -6,10 +6,11 @@ public class SwipeDetection : MonoBehaviour
     [SerializeField] private float minDistance = 0.2f;
     [SerializeField] private float maxTime = 1f;
     [SerializeField, Range(0f,1f)] private float swipeDirectionSimilarityPercentage = 0.9f;
+
     [SerializeField] private GameObject swipeTrail;
-    [SerializeField] private GameObject circle; //for debugging
 
     private InputManager inputManager;
+    private DragNDrop dropInToSlot;
     private Vector2 startPosition;
     private float startTime;
     private Vector2 endPosition;
@@ -18,6 +19,7 @@ public class SwipeDetection : MonoBehaviour
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
+        dropInToSlot = GetComponent<DragNDrop>();
     }
 
     private void OnEnable()
@@ -37,19 +39,24 @@ public class SwipeDetection : MonoBehaviour
         startPosition = position;
         startTime = time;
 
+        dropInToSlot.GetSlotPositions(); // Call to initialize slot positions
+
         //enabling trail
         swipeTrail.SetActive(true);
         //swipeTrail.transform.position = position; //redundant?
-        StartCoroutine(UpdateTrailPosition());
+        StartCoroutine(FollowSwipe());
     }
 
     //moving soemthing relative to touch position
-    private IEnumerator UpdateTrailPosition()
+    private IEnumerator FollowSwipe()
     {
         while (true) 
         {
-            swipeTrail.transform.position = inputManager.PrimaryTouchPosition();
-            circle.transform.position = inputManager.PrimaryTouchPosition();
+            swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition(); 
+            dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();
+
+            dropInToSlot.DropIntoSlot();
+
             yield return null; //waiting for next frame to update trail's position
         }
     }
@@ -62,8 +69,7 @@ public class SwipeDetection : MonoBehaviour
 
         //disabling trail
         swipeTrail.SetActive(false);
-        StopCoroutine(UpdateTrailPosition());
-        //StopCoroutine(coroutine);
+        StopCoroutine(FollowSwipe());
     }
 
     private void DetectSwipe()
@@ -81,7 +87,7 @@ public class SwipeDetection : MonoBehaviour
 
     }
 
-    //standardizing swipe direction to up/down/left/right
+    //standardizing swipe direction to up/down/left/right (for quick swipes)
     private void StandardizeSwipeDirection (Vector2 swipeDirection2D) 
     {
         //Comparing how similar swipe direction is to up/down/left/right; using dot product (see API)
