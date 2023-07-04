@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class TouchDraw : MonoBehaviour
 {
-    Coroutine drawing;
+    [SerializeField] private GameObject playerLine;
+    Coroutine drawingLine;
 
     // This method is called once per frame
     void Update()
@@ -26,29 +27,29 @@ public class TouchDraw : MonoBehaviour
     private void FinishLine()
     {
         // Stop the coroutine responsible for drawing the line
-        StopCoroutine(drawing);
+        StopCoroutine(DrawLine());
     }
 
     // This method is called when the user presses the left mouse button
     private void StartLine()
     {
         // Check if there is already a drawing in progress
-        if (drawing != null)
+        if (drawingLine != null)
         {
             // If there is, stop the coroutine responsible for drawing the previous line
-            StopCoroutine(drawing);
+            StopCoroutine(DrawLine());
         }
 
         // Start a new coroutine to draw a line
         Coroutine coroutine = StartCoroutine(DrawLine());
-        drawing = coroutine;
+        drawingLine = coroutine;
     }
 
     // Coroutine responsible for drawing a line
     IEnumerator DrawLine()
     {
         // Instantiate a new game object from a prefab called "Line"
-        GameObject newGameObject = Instantiate(Resources.Load("Assets/Resources/PreFab/Line") as GameObject, new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject newGameObject = Instantiate(playerLine, new Vector3(0, 0, 0), Quaternion.identity);
         // Get the LineRenderer component attached to the new game object
         LineRenderer line = newGameObject.GetComponent<LineRenderer>();
         // Set the initial position count of the line to 0
