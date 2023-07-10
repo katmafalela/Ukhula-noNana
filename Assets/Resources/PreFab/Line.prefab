@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7919441966357118048}
   - component: {fileID: 4105696562439931492}
+  - component: {fileID: 4122738367305646687}
   m_Layer: 0
   m_Name: Line
   m_TagString: Untagged
@@ -131,3 +132,17 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!64 &4122738367305646687
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187558177187579889}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
