@@ -3,95 +3,89 @@ using UnityEngine;
 
 public class SwipeDetection : MonoBehaviour
 {
-    [SerializeField] private float minDistance = 0.2f;
-    [SerializeField] private float maxTime = 1f;
-    [SerializeField, Range(0f,1f)] private float swipeDirectionSimilarityPercentage = 0.9f;
+    [SerializeField] private float minDistance = 0.2f;  // The minimum distance required for a swipe to be detected
+    [SerializeField] private float maxTime = 1f;  // The maximum time allowed for a swipe to be detected
+    [SerializeField, Range(0f, 1f)] private float swipeDirectionSimilarityPercentage = 0.9f;  // The required similarity percentage for a swipe to be considered in a specific direction
 
-    [SerializeField] private GameObject swipeTrail;
+    [SerializeField] private GameObject swipeTrail;  // The game object representing the trail of the swipe
 
-    private InputManager inputManager;
-    private DragNDrop dropInToSlot;
-    private Vector2 startPosition;
-    private float startTime;
-    private Vector2 endPosition;
-    private float endTime;
+    //private TouchDraw   touchDraw;
+    private InputManager inputManager;  // Reference to the InputManager component
+    private DragNDrop dropInToSlot;  // Reference to the DragNDrop component
+    private Vector2 startPosition;  // The starting position of the swipe
+    private float startTime;  // The time when the swipe started
+    private Vector2 endPosition;  // The ending position of the swipe
+    private float endTime;  // The time when the swipe ended
 
     private void Awake()
     {
-        inputManager = GetComponent<InputManager>();
-        dropInToSlot = GetComponent<DragNDrop>();
+        //touchDraw    = GetComponent<TouchDraw>();
+        inputManager = GetComponent<InputManager>();  // Get the InputManager component attached to the same game object
+        dropInToSlot = GetComponent<DragNDrop>();  // Get the DragNDrop component attached to the same game object
     }
 
     private void OnEnable()
     {
-        inputManager.OnStartTouch += SwipeStart; //Subscribing (+=) to inputManager's OnStartTouch event to make touch & swipe's time & pos relative each other
-        inputManager.OnEndTouch += SwipeEnd; //Subscribing (+=) to inputManager's OnEndTouch event to make touch & swipe's time & last pos before finger lift relative to each other
+        inputManager.OnStartTouch += SwipeStart;  // Subscribe to the OnStartTouch event of the inputManager to handle the start of a touch
+        inputManager.OnEndTouch += SwipeEnd;  // Subscribe to the OnEndTouch event of the inputManager to handle the end of a touch
     }
 
     private void OnDisable()
     {
-        inputManager.OnStartTouch -= SwipeStart; //unsubscribing (-=) from inputManager's OnStartTouch event  
-        inputManager.OnEndTouch -= SwipeEnd; //unsubscribing (-=) from inputManager's OnEndTouch event
+        inputManager.OnStartTouch -= SwipeStart;  // Unsubscribe from the OnStartTouch event of the inputManager
+        inputManager.OnEndTouch -= SwipeEnd;  // Unsubscribe from the OnEndTouch event of the inputManager
     }
 
     private void SwipeStart(Vector2 position, float time)
     {
-        startPosition = position;
-        startTime = time;
+        startPosition = position;  // Store the starting position of the swipe
+        startTime = time;  // Store the starting time of the swipe
 
-        dropInToSlot.GetSlotPositions(); // Call to initialize slot positions
+        dropInToSlot.GetSlotPositions();  // Call a method to initialize slot positions
 
-        //enabling trail
-        swipeTrail.SetActive(true);
-        //swipeTrail.transform.position = position; //redundant?
-        StartCoroutine(FollowSwipe());
+        swipeTrail.SetActive(true);  // Enable the swipe trail game object
+        StartCoroutine(FollowSwipe());  // Start a coroutine to continuously update the position of the swipe trail
     }
-
-    //moving soemthing relative to touch position
+    
     private IEnumerator FollowSwipe()
     {
-        while (true) 
+        while (true)
         {
-            swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition(); 
-            dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();
+            swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition();  // Update the position of the swipe trail to match the current touch position
+            dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();  // Move the draggable object to the current touch position
 
-            dropInToSlot.DropIntoSlot();
+            dropInToSlot.DropIntoSlot();  // Check if the draggable object should be dropped into a slot
 
-            yield return null; //waiting for next frame to update trail's position
+            yield return null;  // Wait for the next frame to update the position of the swipe trail
         }
     }
 
     private void SwipeEnd(Vector2 position, float time)
     {
-        endPosition = position;
-        endTime = time;
-        DetectSwipe(); //detecting swipe after lifted finger (coz need end position)
+        endPosition = position;  // Store the ending position of the swipe
+        endTime = time;  // Store the ending time of the swipe
+        DetectSwipe();  // Detect the direction of the swipe based on the start and end positions
 
-        //disabling trail
-        swipeTrail.SetActive(false);
-        StopCoroutine(FollowSwipe());
+        swipeTrail.SetActive(false);  // Disable the swipe trail game object
+        StopCoroutine(FollowSwipe());  // Stop the coroutine responsible for updating the position of the swipe trail
     }
 
     private void DetectSwipe()
     {
-        //checking if finger has moved far enough & if touch time is short enough to qualify as swipe 
+        // Check if the swipe distance is greater than the minimum distance and the swipe time is within the maximum time limit
         if (Vector3.Distance(startPosition, endPosition) >= minDistance && (endTime - startTime) <= maxTime)
         {
-            //Debug.DrawLine(startPosition, endPosition, UnityEngine.Color.red, 5f); 
+            Vector3 swipeDirection = endPosition - startPosition;  // Calculate the direction vector of the swipe
+            Vector2 swipeDirection2D = new Vector2(swipeDirection.x, swipeDirection.y).normalized;  // Normalize the swipe direction vector
 
-            Vector3 swipeDirection = endPosition - startPosition;
-            Vector2 swipeDirection2D = new Vector2(swipeDirection.x, swipeDirection.y).normalized; //normalizing coz don't need length, of vector
-            
-            StandardizeSwipeDirection(swipeDirection2D);
+            StandardizeSwipeDirection(swipeDirection2D);  // Standardize the swipe direction to up/down/left/right
         }
-
     }
 
-    //standardizing swipe direction to up/down/left/right (for quick swipes)
-    private void StandardizeSwipeDirection (Vector2 swipeDirection2D) 
+    private void StandardizeSwipeDirection(Vector2 swipeDirection2D)
     {
-        //Comparing how similar swipe direction is to up/down/left/right; using dot product (see API)
-        if (Vector2.Dot(Vector2.up, swipeDirection2D) > swipeDirectionSimilarityPercentage) 
+        // Compare the similarity of the swipe direction with up/down/left/right using dot product
+        if (Vector2.Dot(Vector2.up, swipeDirection2D) > swipeDirectionSimilarityPercentage)
         {
             print("Swipe Up -> do something");
         }
@@ -101,11 +95,11 @@ public class SwipeDetection : MonoBehaviour
         }
         else if (Vector2.Dot(Vector2.left, swipeDirection2D) > swipeDirectionSimilarityPercentage)
         {
-            print("Swipe left -> do something");
+            print("Swipe Left -> do something");
         }
         else if (Vector2.Dot(Vector2.right, swipeDirection2D) > swipeDirectionSimilarityPercentage)
         {
-            print("Swipe right -> do something");
+            print("Swipe Right -> do something");
         }
     }
 }

@@ -71,6 +71,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
             //getting touch position & time during event
             OnStartTouch(WorldPrimaryTouchPosition(), (float)context.time);
         }
+
     }
 
     private void EndPrimaryTouch(InputAction.CallbackContext context)
@@ -80,6 +81,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
             //getting touch position & time during event
             OnEndTouch(WorldPrimaryTouchPosition(), (float)context.time);
         }
+
     }
 
     public Vector2 WorldPrimaryTouchPosition()
