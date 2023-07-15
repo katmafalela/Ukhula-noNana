@@ -80,7 +80,7 @@ public class SwipeDetection : MonoBehaviour
             if (touchedObject != null)
             {
                 touchedObject.transform.position = touchPosition;  // Move the touched draggable object to the current touch position
-                dragNdrop.DropIntoSlot();  // Check if the touched draggable object should be dropped into a slot
+                dragNdrop.DropOntoSlot();  // Check if the touched draggable object should be dropped into a slot
             }
 
             yield return null;  // Wait for the next frame to update the position of the swipe trail

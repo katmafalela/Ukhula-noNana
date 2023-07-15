@@ -7,6 +7,7 @@ public class DragNDrop : MonoBehaviour
     [SerializeField] private GameObject matchText;
     [SerializeField] private float minCircleSlotDistance = 1f;
 
+    private CustomTags customTags;
     private GameObject[] totalDraggableObjects;
     private GameObject[] totalSlots;
     private Vector3[] totalSlotPositions;
@@ -24,18 +25,27 @@ public class DragNDrop : MonoBehaviour
 
         for (int slotPosition = 0; slotPosition < totalSlots.Length; slotPosition++) //for so long as there's more than 1 slot
         {
-            totalSlotPositions[slotPosition] = totalSlots[slotPosition].transform.position; //each stored position = position of each slot found
+            //totalSlotPositions[slotPosition] = totalSlots[slotPosition].transform.position; //each stored position = position of each slot found
+
+            customTags = totalSlots[slotPosition].GetComponent<CustomTags>(); //Get each slot position's custom tag component
+
+            if (customTags != null) //ensuring slot position has custom tag component
+            {
+                string letterTag = customTags.customTagsList[0]; //Get each slot position's custom tag Assuming only one custom letter tag assigned
+                totalSlotPositions[slotPosition] = totalSlots[slotPosition].transform.position; // Each stored position = position of each slot found
+                totalSlots[slotPosition].tag = letterTag; // Assign custom letter tag to slotPosition using the TagHolder script
+            }
         }
     }
 
-    public void DropIntoSlot()
+    public void DropOntoSlot()
     {
         foreach (GameObject draggableObject in totalDraggableObjects)
         {
             foreach (Vector3 slotPosition in totalSlotPositions)
             {
                 float objectToSlotDistance = Vector3.Distance(draggableObject.transform.position, slotPosition);
-                //checking if circle is close enough to drop in slot 
+                //checking if draggableObject is close enough to drop in slot 
                 if (objectToSlotDistance <= minCircleSlotDistance)  
                 {
                     //is it possible to give a game object more than 1 tag? otherwise make slot & object names match & check if names match (gnag if statements)

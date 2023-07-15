@@ -119,14 +119,14 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
             //"pinch" out
             if (pinchDistance > previousPinchDistance)
             {
-                zoom.ZoomIn(); 
+                //zoom.ZoomIn(); 
 
             }
 
             //pinch in
             else if (pinchDistance < previousPinchDistance)
             {
-                zoom.ZoomOut();
+                //zoom.ZoomOut();
             }
 
             previousPinchDistance = pinchDistance; // Updating the previous distance for the next loop
