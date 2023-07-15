@@ -46,8 +46,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
 
         secondaryTouchContact.started += _ => PinchStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
         secondaryTouchContact.canceled += _ => PinchEnd();
-        //secondaryTouchContact.started += _ => pinchDetection.ZoomStart(); //Subscribing (+=) to event but ignoring parameter passed in (_) (coz just wanna know if event started or not)
-        //secondaryTouchContact.canceled += _ => pinchDetection.ZoomEnd();
     }
 
     /*private void Update() //instead of events
@@ -65,13 +63,11 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
 
     private void StartPrimaryTouch(InputAction.CallbackContext context)
     {
-
         if (OnStartTouch != null) //checking if event has been subscribed to
         {
             //getting touch position & time during event
             OnStartTouch(WorldPrimaryTouchPosition(), (float)context.time);
         }
-
     }
 
     private void EndPrimaryTouch(InputAction.CallbackContext context)
@@ -81,7 +77,6 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
             //getting touch position & time during event
             OnEndTouch(WorldPrimaryTouchPosition(), (float)context.time);
         }
-
     }
 
     public Vector2 WorldPrimaryTouchPosition()

@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Slot1
   - Dragable
+  - Slots
   layers:
   - Default
   - TransparentFX

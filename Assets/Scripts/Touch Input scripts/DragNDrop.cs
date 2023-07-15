@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class DragNDrop : MonoBehaviour
 {
-    public GameObject dragableObject; //use FindGameObjectsWithTag for multiple draggable objects. 
     [SerializeField] private GameObject matchText;
     [SerializeField] private float minCircleSlotDistance = 1f;
 
+    private GameObject[] totalDraggableObjects;
+    private GameObject[] totalSlots;
     private Vector3[] totalSlotPositions;
+
+    private void Awake()
+    {
+        totalDraggableObjects = GameObject.FindGameObjectsWithTag("Dragable");
+        GetSlotPositions();
+    }
 
     public void GetSlotPositions()
     {
-        GameObject[] totalSlots = GameObject.FindGameObjectsWithTag("Slot1");
+        totalSlots = GameObject.FindGameObjectsWithTag("Slots");
         totalSlotPositions = new Vector3[totalSlots.Length]; //total stored positions = total game objects found
 
         for (int slotPosition = 0; slotPosition < totalSlots.Length; slotPosition++) //for so long as there's more than 1 slot
@@ -23,21 +30,26 @@ public class DragNDrop : MonoBehaviour
 
     public void DropIntoSlot()
     {
-        //checking if circle is close enough to drop in slot 
-        foreach (Vector3 slotPosition in totalSlotPositions)
+        foreach (GameObject draggableObject in totalDraggableObjects)
         {
-            float objectToSlotDistance = Vector3.Distance(dragableObject.transform.position, slotPosition);
-            if (objectToSlotDistance <= minCircleSlotDistance)
+            foreach (Vector3 slotPosition in totalSlotPositions)
             {
-                //DropIntoSlot(slotPosition);
-                dragableObject.transform.position = slotPosition;
-                matchText.SetActive(true);
-                break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
-            }
-            else
-            {
-                matchText.SetActive(false);
+                float objectToSlotDistance = Vector3.Distance(draggableObject.transform.position, slotPosition);
+                //checking if circle is close enough to drop in slot 
+                if (objectToSlotDistance <= minCircleSlotDistance)  
+                {
+                    //is it possible to give a game object more than 1 tag? otherwise make slot & object names match & check if names match (gnag if statements)
+                    //if (draggableObject.name == ... && totalSlots[slot ==)
+                    draggableObject.transform.position = slotPosition;
+                    matchText.SetActive(true);
+                    break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
+                }
+                else
+                {
+                    matchText.SetActive(false);
+                }
             }
         }
     }
 }
+

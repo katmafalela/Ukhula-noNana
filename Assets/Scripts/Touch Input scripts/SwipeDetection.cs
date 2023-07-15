@@ -10,18 +10,19 @@ public class SwipeDetection : MonoBehaviour
     [SerializeField] private GameObject swipeTrail;  // The game object representing the trail of the swipe
 
     //private TouchDraw   touchDraw;
-    private InputManager inputManager;  // Reference to the InputManager component
-    private DragNDrop dropInToSlot;  // Reference to the DragNDrop component
+    private InputManager inputManager;  
+    private DragNDrop dragNdrop;  
     private Vector2 startPosition;  // The starting position of the swipe
     private float startTime;  // The time when the swipe started
     private Vector2 endPosition;  // The ending position of the swipe
     private float endTime;  // The time when the swipe ended
+    private GameObject touchedObject;
 
     private void Awake()
     {
         //touchDraw    = GetComponent<TouchDraw>();
         inputManager = GetComponent<InputManager>();  // Get the InputManager component attached to the same game object
-        dropInToSlot = GetComponent<DragNDrop>();  // Get the DragNDrop component attached to the same game object
+        dragNdrop = GetComponent<DragNDrop>();  // Get the DragNDrop component attached to the same game object
     }
 
     private void OnEnable()
@@ -38,27 +39,61 @@ public class SwipeDetection : MonoBehaviour
 
     private void SwipeStart(Vector2 position, float time)
     {
-        startPosition = position;  // Store the starting position of the swipe
-        startTime = time;  // Store the starting time of the swipe
+        startPosition = position;  
+        startTime = time; 
 
-        dropInToSlot.GetSlotPositions();  // Call a method to initialize slot positions
+       
 
-        swipeTrail.SetActive(true);  // Enable the swipe trail game object
-        StartCoroutine(FollowSwipe());  // Start a coroutine to continuously update the position of the swipe trail
+        swipeTrail.SetActive(true);
+
+        // Check if the touch position overlaps with any draggable object //put in IsTouchOverlappingDraggable bool
+        Collider2D[] dragableColliders = Physics2D.OverlapPointAll(position);
+        foreach (Collider2D collider in dragableColliders)
+        {
+            if (collider.CompareTag("Dragable"))
+            {
+                touchedObject = collider.gameObject;
+                break;
+            }
+        }
+
+        StartCoroutine(FollowSwipe()); 
     }
     
     private IEnumerator FollowSwipe()
     {
         while (true)
         {
+            Vector2 touchPosition = inputManager.WorldPrimaryTouchPosition();  // Get the current touch position
             swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition();  // Update the position of the swipe trail to match the current touch position
-            dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();  // Move the draggable object to the current touch position
 
-            dropInToSlot.DropIntoSlot();  // Check if the draggable object should be dropped into a slot
+            /*dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();  // Move the draggable object to the current touch position
+            dropInToSlot.DropIntoSlot(); */
+
+            // Check if the touch position overlaps with the draggable object
+            /*if (IsTouchOverlappingDraggable(touchPosition))
+            {
+                dropInToSlot.dragableObject.transform.position = touchPosition;  // Move the draggable object to the current touch position
+                dropInToSlot.DropIntoSlot(); 
+            }*/
+
+            if (touchedObject != null)
+            {
+                touchedObject.transform.position = touchPosition;  // Move the touched draggable object to the current touch position
+                dragNdrop.DropIntoSlot();  // Check if the touched draggable object should be dropped into a slot
+            }
 
             yield return null;  // Wait for the next frame to update the position of the swipe trail
         }
     }
+
+   /* private bool IsTouchOverlappingDraggable(Vector2 touchPosition)
+    {
+        Collider2D draggableCollider = dropInToSlot.dragableObject.GetComponent<Collider2D>();  // Get the collider of the draggable object
+
+        // Check if the touch position overlaps with the draggable object's collider
+        return draggableCollider.OverlapPoint(touchPosition);
+    }*/
 
     private void SwipeEnd(Vector2 position, float time)
     {
@@ -68,6 +103,8 @@ public class SwipeDetection : MonoBehaviour
 
         swipeTrail.SetActive(false);  // Disable the swipe trail game object
         StopCoroutine(FollowSwipe());  // Stop the coroutine responsible for updating the position of the swipe trail
+
+        touchedObject = null;  // Reset the touched object
     }
 
     private void DetectSwipe()
