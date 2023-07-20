@@ -25,13 +25,7 @@ public class DragNDrop : MonoBehaviour
 
         for (int slot = 0; slot < totalSlots.Length; slot++) //for so long as there's more than 1 slot
         {
-            CustomTags slotCustomTags = totalSlots[slot].GetComponent<CustomTags>(); //Get each slot position's custom tag component
-
-            if (slotCustomTags != null) //ensuring slot has custom tag component
-            {
-                string letterTag = slotCustomTags.customTagsList[0]; //Get each slot's custom tag Assuming only one custom letter tag assigned
-                totalSlotPositions[slot] = totalSlots[slot].transform.position; // Each stored position = position of each slot found
-            }
+            totalSlotPositions[slot] = totalSlots[slot].transform.position; // Each stored position = position of each slot found
         }
     }
 
@@ -39,29 +33,11 @@ public class DragNDrop : MonoBehaviour
     {
         foreach (GameObject draggableObject in totalDragableObjects)
         {
-            /*foreach (Vector3 slotPosition in totalSlotPositions)
-            {
-                float objectToSlotDistance = Vector3.Distance(draggableObject.transform.position, slotPosition);
-                //checking if draggableObject is close enough to drop in slot 
-                if (objectToSlotDistance <= minCircleSlotDistance)  
-                {
-                    //is it possible to give a game object more than 1 tag? otherwise make slot & object names match & check if names match (gnag if statements)
-                    //if (draggableObject.name == ... && totalSlots[slot ==)
-                    draggableObject.transform.position = slotPosition;
-                    matchText.SetActive(true);
-                    break; //ensureing circle dropped into only 1 slot, even if its colse enough to multiple slots.
-                }
-                else
-                {
-                    matchText.SetActive(false);
-                }
-            }*/
-
             CustomTags dragableCustomTags = draggableObject.GetComponent<CustomTags>(); //Get each draggable's custom tag component
 
             if (dragableCustomTags != null) //ensuring slot position has custom tag component
             {
-                string letterTag = dragableCustomTags.customTagsList[0]; //Get each draggable's custom tag Assuming only one custom letter tag assigned
+                string letterTag = dragableCustomTags.customTagsList[0]; //Get each draggable's custom tag (Assuming only one custom letter tag assigned)
                 bool dropped = false;
 
                 // Loop through slots to find the match
@@ -79,13 +55,13 @@ public class DragNDrop : MonoBehaviour
                         if (objectToSlotDistance <= minCircleSlotDistance)
                         {
                             draggableObject.transform.position = slotPosition; //lerp for smoothness
-                            matchText.SetActive(true);
+                            matchText.SetActive(true); //only working for 1st match
                             dropped = true;
-                            break; //ensuring circle dropped into only 1 slot, even if it's close enough to multiple slots.
+                            break; //ensuring draggable dropped into only 1 slot, even if it's close enough to multiple slots.
                         }
                     }
                 }
-
+                
                 if (!dropped)
                 {
                     matchText.SetActive(false);
