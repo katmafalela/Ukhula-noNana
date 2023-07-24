@@ -11,16 +11,16 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/PuzzleScene.unity
     guid: ac6dce6219d5b15468de6a9b983f8048
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Touch Input.unity
     guid: eb2f2828cd9f9ae498d665133a1685c1
   - enabled: 0
     path: Assets/Scenes/Pinch Detection.unity
     guid: 96ba7a481262d6c43b9fb102502c1e4b
   - enabled: 0
-    path: Assets/Scenes/DrawingMechanism.unity
-    guid: 111417c3facdcb74281522f50ce97617
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/HandwritingMechanic.unity
     guid: 238a0af2ec46ea649b244881ecb2d319
   m_configObjects: {}

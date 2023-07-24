@@ -8,6 +8,7 @@ public class SwipeDetection : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float swipeDirectionSimilarityPercentage = 0.9f;  // The required similarity percentage for a swipe to be considered in a specific direction
 
     [SerializeField] private GameObject swipeTrail;  // The game object representing the trail of the swipe
+    [SerializeField] private GameObject levelManager;
 
     //private TouchDraw   touchDraw;
     private InputManager inputManager;  
@@ -22,7 +23,7 @@ public class SwipeDetection : MonoBehaviour
     {
         //touchDraw    = GetComponent<TouchDraw>();
         inputManager = GetComponent<InputManager>();  // Get the InputManager component attached to the same game object
-        dragNdrop = GetComponent<DragNDrop>();  // Get the DragNDrop component attached to the same game object
+        dragNdrop = levelManager.GetComponent<DragNDrop>();  // Get the DragNDrop component attached to the same game object
     }
 
     private void OnEnable()

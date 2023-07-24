@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Dragable
   - Slots
+  - Word Slot Container
   layers:
   - Default
   - TransparentFX
