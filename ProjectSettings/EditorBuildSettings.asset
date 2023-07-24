@@ -18,9 +18,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Pinch Detection.unity
     guid: 96ba7a481262d6c43b9fb102502c1e4b
   - enabled: 0
-    path: Assets/Scenes/DrawingMechanism.unity
-    guid: 111417c3facdcb74281522f50ce97617
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/HandwritingMechanic.unity
     guid: 238a0af2ec46ea649b244881ecb2d319
+  - enabled: 1
+    path: Assets/Scenes/LettersTemplate/LettersTemplate.unity
+    guid: 8bf8993d8051aa14c87c4cadf17f286a
   m_configObjects: {}
