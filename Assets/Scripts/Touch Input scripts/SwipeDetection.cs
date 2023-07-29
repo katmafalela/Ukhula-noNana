@@ -61,7 +61,7 @@ public class SwipeDetection : MonoBehaviour
         StartCoroutine(FollowSwipe()); 
     }
     
-    private IEnumerator FollowSwipe()
+     private IEnumerator FollowSwipe()
     {
         while (true)
         {
