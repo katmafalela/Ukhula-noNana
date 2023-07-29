@@ -16,7 +16,6 @@ public class DragNDrop : MonoBehaviour
     private GameObject[] wordSlotContainer;
     private Vector3[] totalSlotPositions;
 
-    //private Dictionary<Vector3, bool> isSlotOccupied = new Dictionary<Vector3, bool>(); 
     private Dictionary<GameObject, bool> isDraggableObjectInSlot = new Dictionary<GameObject, bool>();
     private Dictionary<GameObject, Vector3> previousMatchingSlotPosition = new Dictionary<GameObject, Vector3>();
 
@@ -27,12 +26,7 @@ public class DragNDrop : MonoBehaviour
         wordSlotContainer = GameObject.FindGameObjectsWithTag("Word Slot Container");
         GetSlotPositions();
 
-        /*foreach (Vector3 slotPosition in totalSlotPositions)
-        {
-            isSlotOccupied.Add(slotPosition, false);
-        }*/
-
-        // Initialize draggableObjectInSlot and isSlotOccupied dictionary
+        // Initialize the draggableObjectInSlot dictionary
         foreach (GameObject draggableObject in totalDragableObjects)
         {
             isDraggableObjectInSlot.Add(draggableObject, false);
@@ -72,17 +66,10 @@ public class DragNDrop : MonoBehaviour
                     {
                         float objectToSlotDistance = Vector3.Distance(draggableObject.transform.position, slotPosition);
 
-                        //checking if draggableObject is close enough to drop in slot & if slot is occupied
-                        if (objectToSlotDistance <= minCircleSlotDistance) //&& !isSlotOccupied[slotPosition])
+                        //checking if draggableObject is close enough to drop in slot 
+                        if (objectToSlotDistance <= minCircleSlotDistance)
                         {
-                            draggableObject.transform.position = slotPosition; //snapping object into slot //lerp for smoothness
-
-                            dropped = true;
-                            //isSlotOccupied[slotPosition] = true;
-                            isDraggableObjectInSlot[draggableObject] = true;
-                            previousMatchingSlotPosition[draggableObject] = slotPosition; // Update the last known slot position
-
-                            //Preventing continuous counting: Check if the draggable object was in a slot before dragging
+                            // Check if the draggable object is already in a slot
                             if (!isDraggableObjectInSlot[draggableObject])
                             {
                                 matchCounter++; // If not, increase the matchCounter
@@ -95,6 +82,10 @@ public class DragNDrop : MonoBehaviour
                                 spriteRenderer.color = matchingColor;
                             }
 
+                            dropped = true;
+                            draggableObject.transform.position = slotPosition; //lerp for smoothness
+                            isDraggableObjectInSlot[draggableObject] = true; // Set the draggable object's state to "in slot"
+                            previousMatchingSlotPosition[draggableObject] = slotPosition; // Update the last known slot position
                             break; //ensuring draggable dropped into only 1 slot, even if it's close enough to multiple slots.
                         }
                     }
@@ -102,18 +93,15 @@ public class DragNDrop : MonoBehaviour
 
                 if (!dropped)
                 {
-                    //if draggable object is removed from slot
+                    // Check if the draggable object was in a slot before dragging
                     if (isDraggableObjectInSlot[draggableObject])
                     {
+                        // If it was, decrease the matchCounter and set its state to "not in slot"
                         matchCounter--;
                         isDraggableObjectInSlot[draggableObject] = false;
-
-                        // Mark slot as unoccupied
-                        Vector3 previousSlotPosition = previousMatchingSlotPosition[draggableObject];
-                        //isSlotOccupied[previousSlotPosition] = false;
                     }
 
-                    //resetting colour
+                    // Change the color of the draggable object's sprite renderer to the matching color
                     SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
                     if (spriteRenderer != null)
                     {
