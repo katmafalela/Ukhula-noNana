@@ -13,24 +13,28 @@ public class DragNDrop : MonoBehaviour
 
     private GameObject[] totalDragableObjects;
     private GameObject[] totalSlots;
-    private GameObject[] wordSlotContainer;
+    //private GameObject[] wordSlotContainer;
     private Vector3[] totalSlotPositions;
 
     private Dictionary<GameObject, bool> isDraggableObjectInSlot = new Dictionary<GameObject, bool>();
-    private Dictionary<GameObject, Vector3> previousMatchingSlotPosition = new Dictionary<GameObject, Vector3>();
+    private Dictionary<GameObject, bool> isSlotOccupied = new Dictionary<GameObject, bool>();
 
     private void Awake()
     {
         totalDragableObjects = GameObject.FindGameObjectsWithTag("Dragable");
         totalSlots = GameObject.FindGameObjectsWithTag("Slots");
-        wordSlotContainer = GameObject.FindGameObjectsWithTag("Word Slot Container");
+        //wordSlotContainer = GameObject.FindGameObjectsWithTag("Word Slot Container");
         GetSlotPositions();
 
-        // Initialize the draggableObjectInSlot dictionary
+        // Initialize dictionary
         foreach (GameObject draggableObject in totalDragableObjects)
         {
-            isDraggableObjectInSlot.Add(draggableObject, false);
-            previousMatchingSlotPosition.Add(draggableObject, draggableObject.transform.position);
+            isDraggableObjectInSlot.Add(draggableObject, false); 
+        }
+
+        foreach (GameObject slot in totalSlots)
+        {
+            isSlotOccupied.Add(slot, false);
         }
     }
 
@@ -53,9 +57,8 @@ public class DragNDrop : MonoBehaviour
             if (dragableCustomTags != null) //ensuring slot position has custom tag component
             {
                 string letterTag = dragableCustomTags.customTagsList[0]; //Get each draggable's custom tag (Assuming only one custom letter tag assigned)
-                bool dropped = false;
 
-                // Loop through slots to find the match
+                // Loop through slots to find a match
                 for (int slot = 0; slot < totalSlotPositions.Length; slot++)
                 {
                     Vector3 slotPosition = totalSlotPositions[slot];
@@ -69,43 +72,52 @@ public class DragNDrop : MonoBehaviour
                         //checking if draggableObject is close enough to drop in slot 
                         if (objectToSlotDistance <= minCircleSlotDistance)
                         {
-                            // Check if the draggable object is already in a slot
+                            // Check if the slot is already occupied by a draggable object
+                            /*if (isSlotOccupied[totalSlots[slot]])
+                            {
+                                // If the slot is occupied by the same draggable object, do nothing
+                                continue;
+                            }*/
+
+                           
+
+                            draggableObject.transform.position = slotPosition; //lerp for smoothness
+
+                            //Checking if not removing the draggable object from a slot
                             if (!isDraggableObjectInSlot[draggableObject])
                             {
                                 matchCounter++; // If not, increase the matchCounter
                             }
 
-                            // Change the color of the draggable object's sprite renderer to the matching color
+                            isDraggableObjectInSlot[draggableObject] = true;
+                            isSlotOccupied[totalSlots[slot]] = true;
+
+                            //Changing colour
                             SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
                             if (spriteRenderer != null)
                             {
                                 spriteRenderer.color = matchingColor;
                             }
 
-                            dropped = true;
-                            draggableObject.transform.position = slotPosition; //lerp for smoothness
-                            isDraggableObjectInSlot[draggableObject] = true; // Set the draggable object's state to "in slot"
-                            previousMatchingSlotPosition[draggableObject] = slotPosition; // Update the last known slot position
                             break; //ensuring draggable dropped into only 1 slot, even if it's close enough to multiple slots.
                         }
-                    }
-                }
 
-                if (!dropped)
-                {
-                    // Check if the draggable object was in a slot before dragging
-                    if (isDraggableObjectInSlot[draggableObject])
-                    {
-                        // If it was, decrease the matchCounter and set its state to "not in slot"
-                        matchCounter--;
-                        isDraggableObjectInSlot[draggableObject] = false;
-                    }
+                        else
+                        {
+                            //resetting colour
+                            SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
+                            if (spriteRenderer != null)
+                            {
+                                spriteRenderer.color = OGColor;
+                            }
 
-                    // Change the color of the draggable object's sprite renderer to the matching color
-                    SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
-                    if (spriteRenderer != null)
-                    {
-                        spriteRenderer.color = OGColor;
+                            //removing draggable object from a slot
+                            if (isDraggableObjectInSlot[draggableObject])
+                            {
+                                matchCounter--;
+                                isDraggableObjectInSlot[draggableObject] = false;
+                            }
+                        }
                     }
                 }
             }
