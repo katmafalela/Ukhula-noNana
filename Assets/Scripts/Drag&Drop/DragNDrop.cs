@@ -4,89 +4,111 @@ using UnityEngine;
 
 public class DragNDrop : MonoBehaviour
 {
-    [SerializeField] private GameObject matchText;
-    [SerializeField] private float minCircleSlotDistance = 1f;
-    [SerializeField] private int matchCounter = 0;
-    [SerializeField] private int matchCountTarget = 10;
-    [SerializeField] private Color OGColor;
-    [SerializeField] private Color matchingColor; // The color to change the sprite renderer to when it matches the slot
+    // Public variables that can be set in the Inspector
+    [SerializeField] private GameObject matchText;             // The GameObject representing the match text to be shown when the matchCounter reaches the target
+    [SerializeField] private float minCircleSlotDistance = 1f; // The minimum distance from the slot position at which the draggable object can be dropped
+    [SerializeField] private int matchCounter = 0;            // The current number of matches found
+    [SerializeField] private int matchCountTarget = 10;       // The target number of matches to win the game
+    [SerializeField] private Color OGColor;                   // The original color of the draggable object's sprite renderer
+    [SerializeField] private Color matchingColor;             // The color to change the sprite renderer to when it matches the slot
 
-    private GameObject[] totalDragableObjects;
-    private GameObject[] totalSlots;
-    private GameObject[] wordSlotContainer;
-    private Vector3[] totalSlotPositions;
+    // Private variables to store references to GameObjects and positions
+    private GameObject[] totalDragableObjects;                // Array to store all draggable objects in the scene
+    private GameObject[] totalSlots;                          // Array to store all slot positions in the scene
+    private GameObject[] wordSlotContainer;                   // Array to store all containers for word slots in the scene
+    private Vector3[] totalSlotPositions;                     // Array to store the positions of all slot positions
 
-    //private Dictionary<Vector3, bool> isSlotOccupied = new Dictionary<Vector3, bool>(); 
+    // Dictionaries to keep track of which draggable object is in a slot and which slot is occupied by a draggable object
     private Dictionary<GameObject, bool> isDraggableObjectInSlot = new Dictionary<GameObject, bool>();
-    private Dictionary<GameObject, Vector3> previousMatchingSlotPosition = new Dictionary<GameObject, Vector3>();
+    private Dictionary<GameObject, bool> isSlotOccupied = new Dictionary<GameObject, bool>();
 
     private void Awake()
     {
+        // Find all draggable objects, slot positions, and word slot containers in the scene
         totalDragableObjects = GameObject.FindGameObjectsWithTag("Dragable");
         totalSlots = GameObject.FindGameObjectsWithTag("Slots");
         wordSlotContainer = GameObject.FindGameObjectsWithTag("Word Slot Container");
+
+        // Get the positions of all slot positions
         GetSlotPositions();
 
-        /*foreach (Vector3 slotPosition in totalSlotPositions)
-        {
-            isSlotOccupied.Add(slotPosition, false);
-        }*/
-
-        // Initialize draggableObjectInSlot and isSlotOccupied dictionary
+        // Initialize the isDraggableObjectInSlot dictionary
         foreach (GameObject draggableObject in totalDragableObjects)
         {
+            // Initially, set all draggable objects as not in a slot
             isDraggableObjectInSlot.Add(draggableObject, false);
-            previousMatchingSlotPosition.Add(draggableObject, draggableObject.transform.position);
+        }
+
+        // Initialize the isSlotOccupied dictionary
+        foreach (GameObject slot in totalSlots)
+        {
+            // Initially, set all slots as not occupied by any draggable object
+            isSlotOccupied.Add(slot, false);
         }
     }
 
+    // Function to get the positions of all slot positions
     public void GetSlotPositions()
     {
-        totalSlotPositions = new Vector3[totalSlots.Length]; //total stored positions = total game objects found
+        totalSlotPositions = new Vector3[totalSlots.Length]; // Create an array to store the positions of all slot positions
 
-        for (int slot = 0; slot < totalSlots.Length; slot++) //for so long as there's more than 1 slot
+        // Loop through each slot to get its position and store it in the array
+        for (int slot = 0; slot < totalSlots.Length; slot++)
         {
-            totalSlotPositions[slot] = totalSlots[slot].transform.position; // Each stored position = position of each slot found
+            totalSlotPositions[slot] = totalSlots[slot].transform.position;
         }
     }
 
+    // Function to handle dropping a draggable object onto a slot
     public void DropOntoSlot()
     {
+        // Loop through each draggable object to check for matches and dropping into slots
         foreach (GameObject draggableObject in totalDragableObjects)
         {
-            CustomTags dragableCustomTags = draggableObject.GetComponent<CustomTags>(); //Get each draggable's custom tag component
+            CustomTags dragableCustomTags = draggableObject.GetComponent<CustomTags>(); // Get each draggable's custom tag component
 
-            if (dragableCustomTags != null) //ensuring slot position has custom tag component
+            if (dragableCustomTags != null) // Check if the draggable object has a custom tag component
             {
-                string letterTag = dragableCustomTags.customTagsList[0]; //Get each draggable's custom tag (Assuming only one custom letter tag assigned)
-                bool dropped = false;
+                string letterTag = dragableCustomTags.customTagsList[0]; // Get the first custom letter tag assigned to the draggable
 
-                // Loop through slots to find the match
+                // Loop through each slot position to find a match for the draggable object
                 for (int slot = 0; slot < totalSlotPositions.Length; slot++)
                 {
                     Vector3 slotPosition = totalSlotPositions[slot];
-                    CustomTags slotCustomTags = totalSlots[slot].GetComponent<CustomTags>(); //Get each slot position's custom tag component
+                    CustomTags slotCustomTags = totalSlots[slot].GetComponent<CustomTags>(); // Get each slot position's custom tag component
 
-                    // Check if slot & draggableObject have matching letter tags & ensuring slot has custom tag component
+                    // Check if the slot position has a custom tag component and if it has a matching letter tag with the draggable object
                     if (slotCustomTags != null && slotCustomTags.HasTag(letterTag))
                     {
+                        // Calculate the distance between the draggable object and the slot position
                         float objectToSlotDistance = Vector3.Distance(draggableObject.transform.position, slotPosition);
 
-                        //checking if draggableObject is close enough to drop in slot & if slot is occupied
-                        if (objectToSlotDistance <= minCircleSlotDistance) //&& !isSlotOccupied[slotPosition])
+                        // Check if the draggable object is close enough to the slot to be dropped into it
+                        if (objectToSlotDistance <= minCircleSlotDistance)
                         {
-                            draggableObject.transform.position = slotPosition; //snapping object into slot //lerp for smoothness
-
-                            dropped = true;
-                            //isSlotOccupied[slotPosition] = true;
-                            isDraggableObjectInSlot[draggableObject] = true;
-                            previousMatchingSlotPosition[draggableObject] = slotPosition; // Update the last known slot position
-
-                            //Preventing continuous counting: Check if the draggable object was in a slot before dragging
-                            if (!isDraggableObjectInSlot[draggableObject])
+                            // Check if the slot is already occupied by the same draggable object
+                            if (isSlotOccupied[totalSlots[slot]] && isDraggableObjectInSlot[draggableObject])
                             {
-                                matchCounter++; // If not, increase the matchCounter
+                                // If the slot is occupied by the same draggable object, do nothing and continue checking other slots
+                                continue;
                             }
+
+                            // Remove the draggable object from its previous slot if it was in a different slot
+                            foreach (var entry in isSlotOccupied)
+                            {
+                                if (entry.Value && isDraggableObjectInSlot[draggableObject] && entry.Key != totalSlots[slot])
+                                {
+                                    isSlotOccupied[entry.Key] = false;
+                                    break;
+                                }
+                            }
+
+                            // Set the draggable object position to the slot position (lerp for smoothness)
+                            draggableObject.transform.position = slotPosition;
+
+                            // Update the dictionaries to mark the slot and draggable object as occupied
+                            isSlotOccupied[totalSlots[slot]] = true;
+                            isDraggableObjectInSlot[draggableObject] = true;
 
                             // Change the color of the draggable object's sprite renderer to the matching color
                             SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
@@ -95,35 +117,29 @@ public class DragNDrop : MonoBehaviour
                                 spriteRenderer.color = matchingColor;
                             }
 
-                            break; //ensuring draggable dropped into only 1 slot, even if it's close enough to multiple slots.
+                            break; // Ensure the draggable object is dropped into only one slot even if it's close to multiple slots
                         }
-                    }
-                }
+                        else
+                        {
+                            // Change the color of the draggable object's sprite renderer back to the original color
+                            SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
+                            if (spriteRenderer != null)
+                            {
+                                spriteRenderer.color = OGColor;
+                            }
 
-                if (!dropped)
-                {
-                    //if draggable object is removed from slot
-                    if (isDraggableObjectInSlot[draggableObject])
-                    {
-                        matchCounter--;
-                        isDraggableObjectInSlot[draggableObject] = false;
-
-                        // Mark slot as unoccupied
-                        Vector3 previousSlotPosition = previousMatchingSlotPosition[draggableObject];
-                        //isSlotOccupied[previousSlotPosition] = false;
-                    }
-
-                    //resetting colour
-                    SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
-                    if (spriteRenderer != null)
-                    {
-                        spriteRenderer.color = OGColor;
+                            // If the draggable object was in a slot, mark it as unoccupied
+                            if (isDraggableObjectInSlot[draggableObject])
+                            {
+                                isDraggableObjectInSlot[draggableObject] = false;
+                            }
+                        }
                     }
                 }
             }
         }
 
-        // Check if the matchCounter reaches a value of 10 and set the match text active accordingly
+        // Check if the matchCounter reaches the target value and set the match text active accordingly
         if (matchCounter >= matchCountTarget)
         {
             matchText.SetActive(true);
@@ -134,4 +150,3 @@ public class DragNDrop : MonoBehaviour
         }
     }
 }
-

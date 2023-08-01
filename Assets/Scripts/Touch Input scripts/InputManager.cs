@@ -190,7 +190,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
 
     IEnumerator DetectTouch()
     {
-        //Debug.Log("DetectTouch called");
+        Debug.Log("DetectTouch called");
         float pinchDistance = 0f;
         float previousPinchDistance = 0f; 
 
@@ -204,7 +204,7 @@ public class InputManager : MonoBehaviour //Singleton<InputManager> //Making scr
             if(touchedObject!=null)
             {
                 Debug.Log("Check if the DragNDrop works");
-                touchedObject.transform.position = touchPosition;
+                touchedObject.transform.position =touchPosition;
                 dragNdrop.DropOntoSlot();
             }
              
