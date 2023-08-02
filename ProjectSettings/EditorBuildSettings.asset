@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/HandwritingMechanic.unity
     guid: 238a0af2ec46ea649b244881ecb2d319
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LettersTemplate/LettersTemplate.unity
     guid: 8bf8993d8051aa14c87c4cadf17f286a
   m_configObjects: {}
