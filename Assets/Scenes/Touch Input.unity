@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -178,6 +182,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -194,13 +202,12 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &38012655 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 38012654}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &38012656 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -220,6 +227,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - n
+--- !u!224 &38012659 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 38012654}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &43227156
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,11 +465,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
   m_PrefabInstance: {fileID: 3142310337646174990}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &180310102 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 3142310337646174990}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &180310103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,6 +479,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - u
+--- !u!224 &180310105 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 3142310337646174990}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &244204530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1219,6 +1231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1197005601}
+  - component: {fileID: 1197005602}
   m_Layer: 0
   m_Name: SlotContainer
   m_TagString: Untagged
@@ -1242,6 +1255,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1197005602
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197005600}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 18278a09d4db8234992679d3abb3f292, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1001 &1199016550
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1249,6 +1278,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1297,6 +1330,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -1313,13 +1350,20 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.21
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &1199016551 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 1199016550}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1199016552 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -1339,6 +1383,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - s
+--- !u!224 &1199016555 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 1199016550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1225995912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,6 +1436,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -1435,6 +1488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -1451,13 +1508,20 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 3.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.22
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &1295272655 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 1295272654}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1295272656 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -1477,6 +1541,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - n
+--- !u!224 &1295272659 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 1295272654}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1313477977
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1575,7 +1644,7 @@ GameObject:
   - component: {fileID: 1326967626}
   m_Layer: 0
   m_Name: uMasinganaSlots
-  m_TagString: Untagged
+  m_TagString: Dragable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1592,16 +1661,16 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 180310102}
-  - {fileID: 1659677144}
-  - {fileID: 1762955309}
-  - {fileID: 1199016551}
-  - {fileID: 1841913427}
-  - {fileID: 38012655}
-  - {fileID: 2032660146}
-  - {fileID: 1493065041}
-  - {fileID: 1295272655}
-  - {fileID: 2111885077}
+  - {fileID: 180310105}
+  - {fileID: 1659677148}
+  - {fileID: 1762955313}
+  - {fileID: 1199016555}
+  - {fileID: 1841913431}
+  - {fileID: 38012659}
+  - {fileID: 2032660150}
+  - {fileID: 1493065045}
+  - {fileID: 1295272659}
+  - {fileID: 2111885081}
   m_Father: {fileID: 1197005601}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1675,6 +1744,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1723,6 +1796,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -1739,13 +1816,12 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &1493065041 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 1493065040}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1493065042 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -1765,6 +1841,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - a
+--- !u!224 &1493065045 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 1493065040}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1514971337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2012,6 +2093,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2060,6 +2145,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -2076,13 +2165,20 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.057
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.207
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &1659677144 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 1659677143}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1659677145 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -2102,6 +2198,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - M
+--- !u!224 &1659677148 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 1659677143}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1692801335
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,11 +2251,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoomSpeed: 10
-  minDistance: 0.2
-  maxTime: 1
-  swipeDirectionSimilarityPercentage: 0.9
-  swipeTrail: {fileID: 43227156}
-  levelManager: {fileID: 1479012394}
 --- !u!114 &1692801341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2205,7 +2301,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692801335}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17dcecea898e61343bd929ed5f717e8d, type: 3}
   m_Name: 
@@ -2308,6 +2404,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2356,6 +2456,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -2372,13 +2476,20 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.1850002
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &1762955309 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 1762955308}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1762955310 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -2398,6 +2509,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - a
+--- !u!224 &1762955313 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 1762955308}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1841913426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2405,6 +2521,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -2453,6 +2573,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -2469,13 +2593,20 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.21
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &1841913427 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 1841913426}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1841913428 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -2495,6 +2626,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - i
+--- !u!224 &1841913431 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 1841913426}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1926745729
 GameObject:
   m_ObjectHideFlags: 0
@@ -2609,6 +2745,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -2657,6 +2797,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -2673,13 +2817,20 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -2.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.1850002
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &2032660146 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 2032660145}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2032660147 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -2699,6 +2850,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - g
+--- !u!224 &2032660150 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 2032660145}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2101202545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2792,6 +2948,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -2840,6 +3000,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -2856,13 +3020,20 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8113208
       objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.16
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
---- !u!4 &2111885077 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
-  m_PrefabInstance: {fileID: 2111885076}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2111885078 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
@@ -2882,6 +3053,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customTagsList:
   - a
+--- !u!224 &2111885081 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+  m_PrefabInstance: {fileID: 2111885076}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1289683510544213854
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2970,6 +3146,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1326967625}
     m_Modifications:
+    - target: {fileID: 1951639487877902280, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758168, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -3018,6 +3198,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot
       objectReference: {fileID: 0}
+    - target: {fileID: 3142310337551758170, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.a
       value: 0.38431373
@@ -3033,6 +3217,18 @@ PrefabInstance:
     - target: {fileID: 3142310337551758171, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
       propertyPath: m_Color.r
       value: 0.8113208
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 5.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3556398710346055675, guid: afacaba578e23b34eb8302ee3b578623, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afacaba578e23b34eb8302ee3b578623, type: 3}

@@ -38,7 +38,7 @@ public class SwipeDetection : MonoBehaviour
         inputManager.OnEndTouch -= SwipeEnd;  // Unsubscribe from the OnEndTouch event of the inputManager
     }
 
-    private void SwipeStart(Vector2 position, float time)
+    public void SwipeStart(Vector2 position, float time)
     {
         startPosition = position;  
         startTime = time; 
@@ -61,13 +61,13 @@ public class SwipeDetection : MonoBehaviour
         StartCoroutine(FollowSwipe()); 
     }
     
-     private IEnumerator FollowSwipe()
+     public IEnumerator FollowSwipe()
     {
         while (true)
         {
             Vector2 touchPosition = inputManager.WorldPrimaryTouchPosition();  // Get the current touch position
             swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition();  // Update the position of the swipe trail to match the current touch position
-
+            
             /*dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();  // Move the draggable object to the current touch position
             dropInToSlot.DropIntoSlot(); */
 
@@ -96,7 +96,7 @@ public class SwipeDetection : MonoBehaviour
         return draggableCollider.OverlapPoint(touchPosition);
     }*/
 
-    private void SwipeEnd(Vector2 position, float time)
+    public void SwipeEnd(Vector2 position, float time)
     {
         endPosition = position;  // Store the ending position of the swipe
         endTime = time;  // Store the ending time of the swipe
