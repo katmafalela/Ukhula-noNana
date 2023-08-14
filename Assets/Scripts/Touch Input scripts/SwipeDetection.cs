@@ -1,5 +1,9 @@
+using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using static UnityEngine.GraphicsBuffer;
 
 public class SwipeDetection : MonoBehaviour
 {
@@ -67,7 +71,7 @@ public class SwipeDetection : MonoBehaviour
         {
             Vector2 touchPosition = inputManager.WorldPrimaryTouchPosition();  // Get the current touch position
             swipeTrail.transform.position = inputManager.WorldPrimaryTouchPosition();  // Update the position of the swipe trail to match the current touch position
-            
+
             /*dropInToSlot.dragableObject.transform.position = inputManager.WorldPrimaryTouchPosition();  // Move the draggable object to the current touch position
             dropInToSlot.DropIntoSlot(); */
 
@@ -78,23 +82,35 @@ public class SwipeDetection : MonoBehaviour
                 dropInToSlot.DropIntoSlot(); 
             }*/
 
-            if (touchedObject != null)
+            if(touchedObject!= null)
             {
-                touchedObject.transform.position = touchPosition;  // Move the touched draggable object to the current touch position
-                dragNdrop.DropOntoSlot();  // Check if the touched draggable object should be dropped into a slot
+                touchedObject.transform.position = touchPosition;
+
+                ExecuteDropEvent(touchedObject);
             }
+
 
             yield return null;  // Wait for the next frame to update the position of the swipe trail
         }
     }
 
-   /* private bool IsTouchOverlappingDraggable(Vector2 touchPosition)
+    private void ExecuteDropEvent(GameObject target)
     {
-        Collider2D draggableCollider = dropInToSlot.dragableObject.GetComponent<Collider2D>();  // Get the collider of the draggable object
+        // Create a fake PointerEventData
+        PointerEventData fakeEventData = new PointerEventData(EventSystem.current);
+        fakeEventData.pointerId = -1; // Set pointer id to -1 (simulating a fake pointer)
 
-        // Check if the touch position overlaps with the draggable object's collider
-        return draggableCollider.OverlapPoint(touchPosition);
-    }*/
+        // Simulate a drop event on the target object
+        ExecuteEvents.Execute(target, fakeEventData, ExecuteEvents.dropHandler);
+    }
+
+    /* private bool IsTouchOverlappingDraggable(Vector2 touchPosition)
+     {
+         Collider2D draggableCollider = dropInToSlot.dragableObject.GetComponent<Collider2D>();  // Get the collider of the draggable object
+
+         // Check if the touch position overlaps with the draggable object's collider
+         return draggableCollider.OverlapPoint(touchPosition);
+     }*/
 
     public void SwipeEnd(Vector2 position, float time)
     {

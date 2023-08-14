@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DragNDrop : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class DragNDrop : MonoBehaviour
     private Vector3[] totalSlotPositions;
 
     private Dictionary<GameObject, bool> isDraggableObjectInSlot = new Dictionary<GameObject, bool>();
+    private Dictionary<GameObject, GameObject> slotOccupiedBy = new Dictionary<GameObject, GameObject>();
     private string draggbleItemId;
 
     private void Awake()
@@ -29,14 +31,27 @@ public class DragNDrop : MonoBehaviour
         totalSlots = GameObject.FindGameObjectsWithTag("Slots");
         wordSlotContainer = GameObject.FindGameObjectsWithTag("Word Slot Container");
 
+        
+
+        // Initialize isDraggableObjectInSlot dictionary
+        foreach (GameObject draggadObject in totalDragableObjects)
+        {
+            isDraggableObjectInSlot.Add(draggadObject, false);
+        }
+        
         // Get positions of slots
         GetSlotPositions();
 
-        // Initialize isDraggableObjectInSlot dictionary
-        foreach (GameObject draggableObject in totalDragableObjects)
-        {
-            isDraggableObjectInSlot.Add(draggableObject, false);
-        }
+        // Create a fake PointerEventData
+        PointerEventData fakeEventData = new PointerEventData(EventSystem.current);
+        fakeEventData.pointerId = -1;
+
+        DropOntoSlot(fakeEventData);
+    }
+
+    private void Start()
+    {
+        OGColor = totalDragableObjects[0].GetComponent<SpriteRenderer>().color;
     }
 
     public void GetSlotPositions()
@@ -50,11 +65,29 @@ public class DragNDrop : MonoBehaviour
         }
     }
 
-    public void DropOntoSlot()
+    public void DropOntoSlot(BaseEventData eventData)
     {
-        foreach (GameObject draggableObject in totalDragableObjects)
+        PointerEventData pointerVentData = eventData as PointerEventData;
+   
+        if(pointerVentData==null)
         {
-            CustomTags dragableCustomTags = draggableObject.GetComponent<CustomTags>();
+            Debug.Log("Pointereventdata returns null");
+            return;
+        }
+
+        GameObject draggableObject = pointerVentData.pointerDrag;
+        if(draggableObject==null)
+        {
+            Debug.Log("Draggble object retuns null");
+            return;
+        }
+
+        CustomTags dragableCustomTags = draggableObject.GetComponent<CustomTags>();
+
+       
+        foreach (GameObject draggadObject in totalDragableObjects)
+        {
+            CustomTags dragableCustomTag = draggableObject.GetComponent<CustomTags>();
 
             if (dragableCustomTags != null)
             {
@@ -120,6 +153,10 @@ public class DragNDrop : MonoBehaviour
                                 matchCounter--;
                                 isDraggableObjectInSlot[draggableObject] = false;
                             }
+                            if (slotOccupiedBy.ContainsKey(slot) && slotOccupiedBy[slot] == draggableObject)
+                            {
+                                slotOccupiedBy.Remove(slot);
+                            }
                         }
                     }
                 }
@@ -127,13 +164,20 @@ public class DragNDrop : MonoBehaviour
         }
 
         // Update matchText visibility
-        if (matchCounter >= matchCountTarget)
+        matchText.SetActive(matchCounter >= matchCountTarget);
+    }
+
+    public void ResetColors()
+    {
+        foreach (GameObject draggableObject in totalDragableObjects)
         {
-            matchText.SetActive(true);
-        }
-        else
-        {
-            matchText.SetActive(false);
+            SpriteRenderer spriteRenderer = draggableObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = OGColor;
+            }
         }
     }
 }
+
+
