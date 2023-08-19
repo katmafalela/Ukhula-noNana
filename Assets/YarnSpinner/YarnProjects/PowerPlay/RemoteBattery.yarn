@@ -1,0 +1,25 @@
+title: GogoStart
+tags: 
+colorID: 0
+position: -1867,106
+---
+<<isTalking Gogo>> Gesi! Please drop <br> everything you're doing to change the channel! <br> Genrations just started.
+<<isTalking Gesi>> 😩But Gogo, <br> the remote is right next to you.
+<<isTalking Gogo>> You know I'm a BBT <br> Born Before <br> technology.
+===
+title: MyFriend
+tags: 
+colorID: 0
+position: -1850,445
+---
+<<isTalking Gesi>> Hello, my firend. <br> 2 batteries & some GoSlos, <br> please.
+<<isTalking MyFriend>> No change.
+<<isTalking Gesi>> Eish, okay, <br> you can add a stumbo.
+===
+title: Instructions
+tags: 
+colorID: 0
+position: -1516,270
+---
+<<isTalking Instructions>> Put battery in here.
+===

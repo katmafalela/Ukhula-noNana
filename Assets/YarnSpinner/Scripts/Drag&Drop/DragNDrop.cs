@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DragNDrop : MonoBehaviour
 {
-    [SerializeField] private GameObject matchText;
+    [SerializeField] private GameObject triangle;
+   [SerializeField] private GameObject matchText;
     [SerializeField] private float minCircleSlotDistance = 1f;
     [SerializeField] private int matchCounter = 0;
     [SerializeField] private int matchCountTarget = 10;
@@ -73,6 +74,7 @@ public class DragNDrop : MonoBehaviour
                             if (!isDraggableObjectInSlot[draggableObject])
                             {
                                 matchCounter++; // If not, increase the matchCounter
+                                triangle.transform.Translate(0, 1f, 0f);
                             }
 
                             // Change the color of the draggable object's sprite renderer to the matching color
