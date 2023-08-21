@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/PuzzleScene.unity
     guid: ac6dce6219d5b15468de6a9b983f8048
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Touch Input.unity
     guid: eb2f2828cd9f9ae498d665133a1685c1
   - enabled: 0
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/LettersTemplate/LettersTemplate.unity
     guid: 8bf8993d8051aa14c87c4cadf17f286a
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
