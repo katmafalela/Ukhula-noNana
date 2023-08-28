@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class DragNDrop : MonoBehaviour
 {
-    [SerializeField] private GameObject triangle;
-   [SerializeField] private GameObject matchText;
+    [SerializeField] private Transform triangle;
+   [SerializeField] private GameObject matchText; //put in level manager
     [SerializeField] private float minCircleSlotDistance = 1f;
-    [SerializeField] private int matchCounter = 0;
-    [SerializeField] private int matchCountTarget = 10;
+    [SerializeField] private int matchCounter = 0; //put in level manager
+    [SerializeField] private int matchCountTarget = 10; //put in level manager
     [SerializeField] private Color OGColor;
     [SerializeField] private Color matchingColor; // The color to change the sprite renderer to when it matches the slot
 
@@ -65,6 +65,8 @@ public class DragNDrop : MonoBehaviour
                     // Check if slot & draggableObject have matching letter tags & ensuring slot has custom tag component
                     if (slotCustomTags != null && slotCustomTags.HasTag(letterTag))
                     {
+                        //
+
                         float objectToSlotDistance = Vector3.Distance(draggableObject.transform.position, slotPosition);
 
                         //checking if draggableObject is close enough to drop in slot 
@@ -74,7 +76,6 @@ public class DragNDrop : MonoBehaviour
                             if (!isDraggableObjectInSlot[draggableObject])
                             {
                                 matchCounter++; // If not, increase the matchCounter
-                                triangle.transform.Translate(0, 1f, 0f);
                             }
 
                             // Change the color of the draggable object's sprite renderer to the matching color
@@ -114,14 +115,17 @@ public class DragNDrop : MonoBehaviour
         }
 
         // Check if the matchCounter reaches a value of 10 and set the match text active accordingly
-        if (matchCounter >= matchCountTarget)
+        if (matchCounter == matchCountTarget)
         {
             matchText.SetActive(true);
+            triangle.position = new Vector3(8f, -2f, 0f); // call triangle movement function 
         }
         else
         {
             matchText.SetActive(false);
         }
     }
+
+
 }
 

@@ -6,8 +6,14 @@ public class CustomTags : MonoBehaviour
 {
     [SerializeField] public List<string> customTagsList = new List<string>();
 
+    // Example usage: Check if the TagHolder has a specific tag
+    public bool HasTag(string customTag)
+    {
+        return customTagsList.Contains(customTag);
+    }
+
     // Example usage: Add a tag to the TagHolder
-    public void AddTag(string customTag)
+    /*public void AddTag(string customTag)
     {
         if (!customTagsList.Contains(customTag))
         {
@@ -22,11 +28,5 @@ public class CustomTags : MonoBehaviour
         {
             customTagsList.Remove(customTag);
         }
-    }
-
-    // Example usage: Check if the TagHolder has a specific tag
-    public bool HasTag(string customTag)
-    {
-        return customTagsList.Contains(customTag);
-    }
+    }*/
 }
