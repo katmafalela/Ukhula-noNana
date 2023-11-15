@@ -8,9 +8,15 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Drag&Drop.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/Scenes/PuzzleScene.unity
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: bc45996b61708414b9474b6422839244
+  - enabled: 1
+    path: Assets/Scenes/Level 1.unity
     guid: ac6dce6219d5b15468de6a9b983f8048
+  - enabled: 1
+    path: Assets/StepMoveProject/Level 2.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
     path: Assets/Scenes/Touch Input.unity
     guid: eb2f2828cd9f9ae498d665133a1685c1
@@ -20,12 +26,6 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: bc45996b61708414b9474b6422839244
-  - enabled: 1
-    path: Assets/StepMoveProject/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
     path: Assets/Scenes/HandwritingMechanic.unity
     guid: 238a0af2ec46ea649b244881ecb2d319
